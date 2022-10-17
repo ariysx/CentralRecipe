@@ -19,7 +19,7 @@ app.use(express.urlencoded({extended: false}))
 
 
 // Create default routes
-// app.use('/api/user', require('./routes/userRoutes'))
+app.use('/api/user', require('./routes/userRoutes'))
 app.use('/api/recipe', require('./routes/recipeRoutes'))
 
 // Override express default handler

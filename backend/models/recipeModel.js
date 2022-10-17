@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const recipeSchema = mongoose.Schema(
     {
-        title: {
+        name: {
             type: String,
             required: [true, 'Please provide a title']
         },
@@ -29,10 +29,11 @@ const recipeSchema = mongoose.Schema(
             }
         },
         publisher: {
-            type: String,
-            required: [true, 'Please provide a publisher']
+            type: mongoose.Schema.Types.ObjectId,
+            required: [true, 'Please provide a publisher'],
+            ref: 'User'
         },
-        total_likes: {
+        likes: {
             type: Number,
             required: false,
             default: 0

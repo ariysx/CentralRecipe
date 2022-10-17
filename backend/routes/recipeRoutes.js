@@ -4,10 +4,13 @@ const express = require("express")
 const router = express.Router()
 
 // Login Module
-const { getRecipe, setRecipe, updateRecipe, deleteRecipe } = require('../controllers/recipeController')
+const { getRecipes, createRecipe, updateRecipe, deleteRecipe, getRecipeByUser, getRecipeByName} = require('../controllers/recipeController')
+const {protect} = require("../middlewares/authMiddleware");
 
-router.route('/').get(getRecipe).post(setRecipe)
-router.route('/:id').put(updateRecipe).delete(deleteRecipe)
+router.route('/').get(getRecipes).post(protect, createRecipe)
+router.route('/:id').put(updateRecipe).delete(protect, deleteRecipe)
+router.get('/user/:id', getRecipeByUser)
+router.get('/name/:name', getRecipeByName)
 
 // Export userRoute
 module.exports = router

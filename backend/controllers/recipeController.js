@@ -3,38 +3,66 @@ const asyncHandler = require('express-async-handler')
 
 // Importing mongoose model
 const Recipe = require('../models/recipeModel')
+const User = require("../models/userModel");
 
 // @desc Get Recipes
 // @route GET /api/recipe
-// @access Private
-const getRecipe = asyncHandler(async (req, res) => {
-    const Recipes = await Recipe.find()
-    res.status(200).json(Recipes)
+// @access Public
+const getRecipes = asyncHandler(async (req, res) => {
+    const recipe = await Recipe.find()
+    res.status(200).json(recipe)
 })
 
-// @desc Set Recipe
-// @route SET /api/recipe
+// @desc Get Recipes by user
+// @route GET /api/recipe/user/:id
+// @access Public
+const getRecipeByUser = asyncHandler(async (req, res) => {
+    const recipe = await Recipe.find({publisher: req.params.id})
+    res.status(200).json(recipe)
+})
+
+// @desc Get Recipe by name
+// @route GET /api/recipe/name/:id
+// @access Public
+const getRecipeByName = asyncHandler( async (req, res) => {
+    const recipe = await Recipe.find({name: req.params.name})
+    res.status(200).json(recipe)
+})
+
+// @desc Create Recipe
+// @route POST /api/recipe
 // @access Private
-const setRecipe = asyncHandler(async (req, res) => {
-    if(!req.body.title){
+const createRecipe = asyncHandler(async (req, res) => {
+
+    const { _id } = await User.findById(req.user.id)
+
+    const {name, body, ingredients, instructions, images } = req.body
+    const publisher = _id
+
+    if(!name || !body || !ingredients || !instructions || !images ){
         res.status(400)
-        throw new Error('Please provide a text')
+        throw new Error('Please provide all fields')
     }
 
-    const createRecipe = await Recipe.create(req.body)
-
-    res.status(200).json({
-        message: `Set Recipe`
+    const recipe = await Recipe.create({
+        name,
+        body,
+        ingredients,
+        instructions,
+        images,
+        publisher
     })
+
+    res.status(200).json(recipe)
 })
 
 // @desc Update Recipe
 // @route PUT /api/recipe/:id
 // @access Private
 const updateRecipe = asyncHandler(async (req, res) => {
-    const Recipe = Recipe.findById(req.params.id)
+    const recipe = Recipe.findById(req.params.id)
 
-    if(!Recipe) {
+    if(!recipe) {
         res.status(400)
         throw new Error('Recipe not found')
     }
@@ -49,24 +77,31 @@ const updateRecipe = asyncHandler(async (req, res) => {
 // @access Private
 const deleteRecipe = asyncHandler(async (req, res) => {
 
-    const Recipe = Recipe.findById(req.params.id)
+    // TODO Fix Delete not working, broken logic - ID not exist but returned success???
+    const { _id } = await User.findById(req.user.id)
+    const publisher = _id
+    const recipe = Recipe.find({id: req.params.id, publisher: _id})
+    // const recipe = Recipe.findById(req.params.id)
 
-    if(!Recipe) {
+    if(!recipe) {
         res.status(400)
         throw new Error('Recipe not found')
     }
 
-    await Recipe.remove()
+    await Recipe.findByIdAndDelete(req.params.id)
 
     res.status(200).json({
-        message: `Delete Recipe ${req.params.id}`
+        publisher: `${publisher}`,
+        message: `Delete Recipe ${req.params.id}`,
     })
 })
 
 // Export Modules
 module.exports = {
-    getRecipe,
-    setRecipe,
+    getRecipes,
+    getRecipeByUser,
+    getRecipeByName,
+    createRecipe,
     updateRecipe,
     deleteRecipe,
 }
