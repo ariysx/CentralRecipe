@@ -11,6 +11,8 @@ router.post('/register', registerUser)
 router.get('/find/:id', getUser)
 router.post('/login', authenticateUser)
 router.get('/me', protect, getMe)
+router.put('/', protect, updateUser)
+router.delete('/', protect, deleteUser)
 
 // Export userRoute
 module.exports = router

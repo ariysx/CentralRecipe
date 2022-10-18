@@ -8,9 +8,9 @@ const { getRecipes, createRecipe, updateRecipe, deleteRecipe, getRecipeByUser, g
 const {protect} = require("../middlewares/authMiddleware");
 
 router.route('/').get(getRecipes).post(protect, createRecipe)
-router.route('/:id').put(updateRecipe).delete(protect, deleteRecipe)
+router.route('/:id').put(protect, updateRecipe).delete(protect, deleteRecipe)
 router.get('/user/:id', getRecipeByUser)
-router.get('/name/:name', getRecipeByName)
+router.get('/name', getRecipeByName)
 
 // Export userRoute
 module.exports = router

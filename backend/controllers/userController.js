@@ -75,9 +75,14 @@ const registerUser = asyncHandler (async (req, res) => {
 // @route POST /api/user
 // @access Public
 const authenticateUser = asyncHandler (async (req, res) => {
-    const {email, password} = req.body
+    const {username, email, password} = req.body
 
-    const user = await User.findOne({email})
+    if(!username && !email){
+        res.status(400)
+        throw new Error('Please provide all fields')
+    }
+
+    const user = await User.findOne({$or: [{email}, {username}]})
 
     if(user && (await bcrypt.compare(password, user.password))){
         res.status(200).json({
@@ -96,10 +101,9 @@ const authenticateUser = asyncHandler (async (req, res) => {
 // @route PUT /api/user/:id
 // @access Private
 const updateUser = asyncHandler( async(req, res) => {
-    const User = User.findById(req.params.id)
 
-    if(!User) {
-        res.status(400)
+    if(!req.user) {
+        res.status(401)
         throw new Error('User not found')
     }
 
@@ -113,9 +117,7 @@ const updateUser = asyncHandler( async(req, res) => {
 // @access Private
 const deleteUser = asyncHandler( async (req, res) => {
 
-    const User = User.findById(req.params.id)
-
-    if(!User) {
+    if(!req.user) {
         res.status(400)
         throw new Error('User not found')
     }

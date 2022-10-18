@@ -4,7 +4,6 @@ const asyncHandler = require('express-async-handler')
 // Importing mongoose model
 const Recipe = require('../models/recipeModel')
 const User = require("../models/userModel");
-const mongoose = require("mongoose");
 
 // @desc Get Recipes
 // @route GET /api/recipe
@@ -23,10 +22,10 @@ const getRecipeByUser = asyncHandler(async (req, res) => {
 })
 
 // @desc Get Recipe by name
-// @route GET /api/recipe/name/:id
+// @route GET /api/recipe/name
 // @access Public
 const getRecipeByName = asyncHandler( async (req, res) => {
-    const recipe = await Recipe.find({name: req.params.name})
+    const recipe = await Recipe.find({name: {$regex: req.body.name}})
     res.status(200).json(recipe)
 })
 
@@ -35,10 +34,14 @@ const getRecipeByName = asyncHandler( async (req, res) => {
 // @access Private
 const createRecipe = asyncHandler(async (req, res) => {
 
-    const { _id } = await User.findById(req.user.id)
+    const user = await User.findById(req.user.id)
+
+    if(!user){
+        res.status(401)
+        throw new Error('User not found')
+    }
 
     const {name, body, ingredients, instructions, images } = req.body
-    const publisher = _id
 
     if(!name || !body || !ingredients || !instructions || !images ){
         res.status(400)
@@ -51,7 +54,7 @@ const createRecipe = asyncHandler(async (req, res) => {
         ingredients,
         instructions,
         images,
-        publisher
+        publisher: user
     })
 
     res.status(200).json(recipe)
@@ -61,11 +64,24 @@ const createRecipe = asyncHandler(async (req, res) => {
 // @route PUT /api/recipe/:id
 // @access Private
 const updateRecipe = asyncHandler(async (req, res) => {
-    const recipe = Recipe.findById(req.params.id)
+
+    // Check for user
+    if(!req.user){
+        res.status(401)
+        throw new Error('User not found')
+    }
+
+    const recipe = await Recipe.findById(req.params.id)
 
     if(!recipe) {
         res.status(400)
         throw new Error('Recipe not found')
+    }
+
+    // Make sure user is owner
+    if(recipe.publisher.toString() !== req.user.id){
+        res.status(401)
+        throw new Error('Unauthorized')
     }
 
     const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, {new: true})
@@ -78,7 +94,12 @@ const updateRecipe = asyncHandler(async (req, res) => {
 // @access Private
 const deleteRecipe = asyncHandler(async (req, res) => {
 
-    const { _id } = await User.findById(req.user.id)
+    // Check for user
+    if(!req.user){
+        res.status(401)
+        throw new Error('User not found')
+    }
+
     const recipe = await Recipe.findById(req.params.id)
 
     if(!recipe) {
@@ -86,15 +107,16 @@ const deleteRecipe = asyncHandler(async (req, res) => {
         throw new Error('Recipe not found')
     }
 
-    if(!recipe.publisher.equals(_id)){
-        res.status(400)
-        throw new Error('Recipe cannot be deleted, Unauthorized')
+    // Make sure user is owner
+    if(recipe.publisher.toString() !== req.user.id){
+        res.status(401)
+        throw new Error('Unauthorized')
     }
 
     await Recipe.findByIdAndDelete(req.params.id)
 
     res.status(200).json({
-        publisher: `Removed from publisher: ${_id}`,
+        publisher: `Removed from publisher: ${req.user.id}`,
         message: `Delete Recipe ${req.params.id}`,
     })
 
