@@ -4,6 +4,7 @@ const asyncHandler = require('express-async-handler')
 // Importing mongoose model
 const Recipe = require('../models/recipeModel')
 const User = require("../models/userModel");
+const mongoose = require("mongoose");
 
 // @desc Get Recipes
 // @route GET /api/recipe
@@ -77,23 +78,26 @@ const updateRecipe = asyncHandler(async (req, res) => {
 // @access Private
 const deleteRecipe = asyncHandler(async (req, res) => {
 
-    // TODO Fix Delete not working, broken logic - ID not exist but returned success???
     const { _id } = await User.findById(req.user.id)
-    const publisher = _id
-    const recipe = Recipe.find({id: req.params.id, publisher: _id})
-    // const recipe = Recipe.findById(req.params.id)
+    const recipe = await Recipe.findById(req.params.id)
 
     if(!recipe) {
         res.status(400)
         throw new Error('Recipe not found')
     }
 
+    if(!recipe.publisher.equals(_id)){
+        res.status(400)
+        throw new Error('Recipe cannot be deleted, Unauthorized')
+    }
+
     await Recipe.findByIdAndDelete(req.params.id)
 
     res.status(200).json({
-        publisher: `${publisher}`,
+        publisher: `Removed from publisher: ${_id}`,
         message: `Delete Recipe ${req.params.id}`,
     })
+
 })
 
 // Export Modules
