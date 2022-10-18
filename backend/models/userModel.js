@@ -4,6 +4,10 @@ const userSchema = new mongoose.Schema(
     {
         username: {
             type: String,
+            index: {
+                unique: true,
+                dropDups: true
+            },
             required: [true, 'Please provide a username']
         },
         password: {
@@ -12,7 +16,10 @@ const userSchema = new mongoose.Schema(
         },
         email: {
             type: String,
-            unique: true,
+            index: {
+                unique: true,
+                dropDups: true
+            },
             required: [true, 'Please provide an email']
         },
         name: {
