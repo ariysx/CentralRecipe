@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
+const Recipe = require('../models/recipeModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
@@ -14,7 +15,7 @@ const generateToken = (id) => {
 // @route GET /api/user/me
 // @access Public
 const getMe = asyncHandler (async (req, res) => {
-    const { _id, username, name, email } = await User.findById(req.user.id)
+    const { _id, username, name, email } = await User.findById(req.user._id)
     res.status(200).json({
         id: _id,
         username,
@@ -87,6 +88,7 @@ const authenticateUser = asyncHandler (async (req, res) => {
     if(user && (await bcrypt.compare(password, user.password))){
         res.status(200).json({
             _id: user.id,
+            username: user.username,
             name: user.name,
             email: user.email,
             token: generateToken(user.id)
@@ -98,7 +100,7 @@ const authenticateUser = asyncHandler (async (req, res) => {
 })
 
 // @desc Update user
-// @route PUT /api/user/:id
+// @route PUT /api/user/
 // @access Private
 const updateUser = asyncHandler( async(req, res) => {
 
@@ -107,9 +109,14 @@ const updateUser = asyncHandler( async(req, res) => {
         throw new Error('User not found')
     }
 
-    const updatedRecipe = await User.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    if(req.body.favourites) {
+        delete req.body.favourites
+        res.status(401)
+        throw new Error('Cannot have favourites')
+    }
 
-    res.status(200).json(updatedRecipe)
+    const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {new: true})
+    res.status(200).json(updatedUser)
 })
 
 // @desc Delete user
@@ -129,6 +136,58 @@ const deleteUser = asyncHandler( async (req, res) => {
     })
 })
 
+
+// @desc Update to fav list
+// @route PUT /api/user/favourite/push
+// @access Private
+const appendFavourite = asyncHandler( async(req, res) => {
+    // const user = await User.findById(req.user._id)
+    const newFav = await User.findByIdAndUpdate(req.user._id, {$addToSet: {"favourites": req.body.favourites}}, {new: true}).select("favourites -_id")
+    const newRecipe = await Recipe.findByIdAndUpdate(req.body.favourites, {$inc: {"likes": 1}}, {new: true})
+    res.status(200).json(newFav)
+})
+
+// @desc Remove from fav list
+// @route PUT /api/user/favourite/pull
+// @access Private
+const removeFavourite = asyncHandler( async(req, res) => {
+    const newFav = await User.findByIdAndUpdate(req.user._id, {$pull: {"favourites": req.body.favourites}},{new: true}).select("favourites -_id")
+    const newRecipe = await Recipe.findByIdAndUpdate(req.body.favourites, {$inc: {"likes": -1}}, {new: true})
+    res.status(200).json(newFav)
+})
+
+const getFavourites = asyncHandler(async (req, res) => {
+    if(!req.user) {
+        res.status(401)
+        throw new Error('User not found')
+    }
+
+    const favourites = await User.findById(req.user._id, {_id:0, favourites: 1})
+
+    res.status(200).json(favourites)
+})
+
+const isFavourite = asyncHandler( async (req, res) => {
+    if(!req.user) {
+        res.status(401)
+        throw new Error('User not found')
+    }
+
+    const favourites = await User.find({_id: req.user._id, favourites: req.params.id}, {new: true})
+    // console.log(favourites)
+    if(!favourites.length) {
+        res.status(200).json({
+            result: false
+        })
+    } else {
+        res.status(200).json({
+            result: true
+        })
+    }
+
+})
+
+
 // Export Modules
 module.exports = {
     getMe,
@@ -137,4 +196,8 @@ module.exports = {
     authenticateUser,
     updateUser,
     deleteUser,
+    appendFavourite,
+    removeFavourite,
+    getFavourites,
+    isFavourite,
 }

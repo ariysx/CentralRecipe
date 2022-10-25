@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler')
 
 // Importing mongoose model
 const Recipe = require('../models/recipeModel')
-const User = require("../models/userModel");
+const User = require("../models/userModel")
 
 // @desc Get Recipes
 // @route GET /api/recipe

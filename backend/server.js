@@ -22,6 +22,9 @@ app.use(express.urlencoded({extended: false}))
 app.use('/api/user', require('./routes/userRoutes'))
 app.use('/api/recipe', require('./routes/recipeRoutes'))
 
+// Create file sharing service
+app.use('/api/upload', require('./routes/uploadRoutes'))
+
 // Override express default handler
 // custom error handling must be at the end of application stack
 app.use(errorHandler)

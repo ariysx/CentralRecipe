@@ -15,8 +15,12 @@ const recipeSchema = mongoose.Schema(
             required: [true, 'Please provide an ingredient']
         },
         instructions: {
-            type: String,
+            type: [String],
             required: [true, 'Please provide an instruction']
+        },
+        duration: {
+            type: Number,
+            required: [true, 'Please provide an estimated cooking time']
         },
         images: {
             type: [String],
@@ -27,6 +31,9 @@ const recipeSchema = mongoose.Schema(
             default: function(){
                 return this.images[0].toString()
             }
+        },
+        tags: {
+            type: [String]
         },
         publisher: {
             type: mongoose.Schema.Types.ObjectId,
@@ -42,10 +49,5 @@ const recipeSchema = mongoose.Schema(
         timestamps: true,
     }
 )
-//
-// recipeSchema.pre('save', function(next){
-//     this.thumbnail = this.image[0]
-//     next()
-// })
 
 module.exports = mongoose.model('Recipe', recipeSchema)
