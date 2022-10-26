@@ -5,7 +5,7 @@ const asyncHandler = require('express-async-handler')
 const Recipe = require('../models/recipeModel')
 const User = require("../models/userModel")
 
-// @desc Get Recipes
+// @desc Get MyRecipes
 // @route GET /api/recipe
 // @access Public
 const getRecipes = asyncHandler(async (req, res) => {
@@ -13,7 +13,7 @@ const getRecipes = asyncHandler(async (req, res) => {
     res.status(200).json(recipe)
 })
 
-// @desc Get Recipes by user
+// @desc Get MyRecipes by user
 // @route GET /api/recipe/user/:id
 // @access Public
 const getRecipeByUser = asyncHandler(async (req, res) => {

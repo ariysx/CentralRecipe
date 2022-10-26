@@ -29,6 +29,9 @@ const userSchema = new mongoose.Schema(
         favourites: {
             type: [String],
             ref: 'Recipe'
+        },
+        picture: {
+            type: [String],
         }
     },
     {
