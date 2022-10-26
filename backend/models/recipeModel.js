@@ -6,34 +6,36 @@ const recipeSchema = mongoose.Schema(
             type: String,
             required: [true, 'Please provide a title']
         },
-        body: {
+        image: {
             type: String,
-            required: [true, 'Please provide a body']
-        },
-        ingredients: {
-            type: [String],
-            required: [true, 'Please provide an ingredient']
-        },
-        instructions: {
-            type: [String],
-            required: [true, 'Please provide an instruction']
-        },
-        duration: {
-            type: Number,
-            required: [true, 'Please provide an estimated cooking time']
-        },
-        images: {
-            type: [String],
             required: [true, 'Please provide an image']
         },
-        thumbnail: {
+        description: {
             type: String,
-            default: function(){
-                return this.images[0].toString()
-            }
+            required: [true, 'Please provide a description']
         },
-        tags: {
-            type: [String]
+        category: {
+            type: [String],
+            required: [true, 'Please provide a category']
+        },
+        keywords: {
+            type: {},
+            required: [true, 'Please provide a keyword']
+        },
+        // TODO fix this duration thing to match restrictions
+        duration: {
+            type: [],
+            required: [true, 'Please provide a time']
+        },
+        // TODO fix this thing to match restrictions
+        ingredients: {
+            type: [],
+            required: [true, 'Please provide an ingredient']
+        },
+        // TODO fix this thing to match restrictions
+        instructions: {
+            type: [],
+            required: [true, 'Please provide an instruction']
         },
         publisher: {
             type: mongoose.Schema.Types.ObjectId,
