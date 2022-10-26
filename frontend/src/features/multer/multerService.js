@@ -3,9 +3,11 @@ import axios from "axios";
 const API_URL = "/api/upload/"
 
 const upload = (async(data, token) => {
+
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data"
         },
     }
     const response = await axios.post(API_URL + '', data, config)

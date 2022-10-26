@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {Formik, Field, FieldArray,} from 'formik'
 import {Button, Form, InputGroup, Spinner} from "react-bootstrap"
 import {FaTrash} from "react-icons/fa";
@@ -9,7 +9,12 @@ import {upload} from "../../features/multer/multerSlice";
 export default function FormRecipeAdd() {
 
     const dispatch = useDispatch()
-    const { multer } = useSelector((state) => state.multer)
+    const {multer} = useSelector((state) => state.multer)
+    const {preImg, setPreImg} = useState('')
+
+    // useEffect(() => {
+    //     setPreImg(multer.data)
+    //     }, [dispatch])
 
     return (
         <>
@@ -53,17 +58,22 @@ export default function FormRecipeAdd() {
                 //     instructions: Yup.array().min(1).max(15).required(),
                 // })}
                 onSubmit={async (values) => {
-                    console.log(values)
-                    console.log(values.image)
-                    dispatch(upload({
-                        image: values.image
-                    }))
 
                     // return new Promise(res => setTimeout(res, 2500))
 
                 }
                 }>
-                {({values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue}) => (
+                {({
+                      values,
+                      errors,
+                      touched,
+                      handleChange,
+                      handleBlur,
+                      handleSubmit,
+                      isSubmitting,
+                      setFieldValue
+                  }) => (
+                      <>
                     <Form autoComplete="off" onSubmit={handleSubmit} encType="multipart/form-data">
                         <Form.Group className="mb-3">
                             {/*{errors.name && touched.name ? (<p className={""}>Required Field</p>) : null}*/}
@@ -74,13 +84,23 @@ export default function FormRecipeAdd() {
                                           value={values.name}
                             />
                         </Form.Group>
-
+                        {console.log(values.image)}
+                        {values.image ? (<img className="m-auto d-block" src={URL.createObjectURL(values.image)} alt=""/>) : null}
                         <Form.Group className="mb-3">
                             <Form.Label>Recipe Image</Form.Label>
-                            <input id="image" name="image" type="file" onChange={(event) => {
-                                setFieldValue("image", event.currentTarget.files[0]);
-                            }} className="form-control" />
-                            <img src={values.image} alt=""/>
+                            <InputGroup>
+                                {/*<Field type="file" name="image" className="form-control"/>*/}
+                                <input id="image" name="image" type="file" accept='image/*' onChange={(event) => {
+                                    setFieldValue('image', event.currentTarget.files[0])
+                                }}
+                                       className="form-control"/>
+                                {/*<img src={values.image} alt=""/>*/}
+                                <Button variant={"primary"} onClick={() => {
+                                    const formData = new FormData()
+                                    formData.append('image', values.image)
+                                    dispatch(upload(formData))
+                                }}>Upload</Button>
+                            </InputGroup>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
@@ -106,7 +126,9 @@ export default function FormRecipeAdd() {
                                                 <InputGroup>
                                                     <Field name={`category[${index}]`} as="select"
                                                            className="form-select">
-                                                        <option value="" selected={true} disabled={true}>Select a Category</option>
+                                                        <option value="" selected={true} disabled={true}>Select a
+                                                            Category
+                                                        </option>
                                                         <option value="appetizer">Appetizers</option>
                                                         <option value="condiment">Condiments</option>
                                                         <option value="confectionery">Confectionery</option>
@@ -148,10 +170,6 @@ export default function FormRecipeAdd() {
 
                         <Form.Group className="mb-3">
                             <Form.Label>Keywords</Form.Label>
-                            {/*<Form.Control type="text" name="ingredients"*/}
-                            {/*              onChange={handleChange}*/}
-                            {/*              onBlur={handleBlur}*/}
-                            {/*              value={values.ingredients}/>*/}
                             <FieldArray name="keywords">
                                 {({push, remove}) => (
                                     <>
@@ -178,7 +196,8 @@ export default function FormRecipeAdd() {
                         <Form.Group className="mb-3">
                             <Form.Label>Preperation Time</Form.Label>
                             <InputGroup>
-                                <Field name="duration['preparation'].time" className="form-control col-1" type="number"/>
+                                <Field name="duration['preparation'].time" className="form-control col-1"
+                                       type="number"/>
                                 <Field name="duration['preparation'].unit" className="form-select" as="select">
                                     <option value="minute">Minutes</option>
                                     <option value="hour">Hours</option>
@@ -189,7 +208,8 @@ export default function FormRecipeAdd() {
                         <Form.Group className="mb-3">
                             <Form.Label>Cooking Time</Form.Label>
                             <InputGroup>
-                                <Field name="duration['cooking'].time" className="form-control col-1" type="number"/>
+                                <Field name="duration['cooking'].time" className="form-control col-1"
+                                       type="number"/>
                                 <Field name="duration['cooking'].unit" className="form-select" as="select">
                                     <option value="minute">Minutes</option>
                                     <option value="hour">Hours</option>
@@ -224,7 +244,9 @@ export default function FormRecipeAdd() {
                                                            className="form-control" type="number"/>
                                                     <Field name={`ingredients[${index}].unit`} as="select"
                                                            className="form-select">
-                                                        <option value="" selected={true} disabled={true}>Select a Unit</option>
+                                                        <option value="" selected={true} disabled={true}>Select a
+                                                            Unit
+                                                        </option>
                                                         <option value="g">Grams (g)</option>
                                                         <option value="kg">Kilograms (kg)</option>
                                                         <option value="mg">Milligrams (mg)</option>
@@ -279,7 +301,8 @@ export default function FormRecipeAdd() {
                                                 <InputGroup>
                                                     <Button variant={"disabled"}
                                                             className={"col-1"}>Step {index + 1}</Button>
-                                                    <Field as="textarea" name={`instructions[${index}]`} className="form-control"
+                                                    <Field as="textarea" name={`instructions[${index}]`}
+                                                           className="form-control"
                                                            type="textarea"/>
                                                     {values.instructions.length === 1 ? null : (
                                                         <Button variant={"danger"} onClick={() => {
@@ -300,6 +323,7 @@ export default function FormRecipeAdd() {
                         </Button>
                         <pre>{JSON.stringify({values, errors}, null, 4)}</pre>
                     </Form>
+                    </>
                 )}
             </Formik>
         </>

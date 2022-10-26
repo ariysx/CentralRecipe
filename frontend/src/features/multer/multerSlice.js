@@ -12,7 +12,6 @@ const initialState = {
 export const upload = createAsyncThunk('multer/upload', async (data, thunkAPI) => {
     try{
         const token = thunkAPI.getState().auth.user.token
-        console.log(data)
         return await multerService.upload(data,token);
     }catch (e){
         const message = (e.response && e.response.data && e.response.data.message) || e.message || e.toString()
@@ -45,7 +44,7 @@ const multerSlice = createSlice(
                 .addCase(upload.fulfilled, (state, action) => {
                     state.isLoading = false
                     state.isSuccess = true
-                    state.message = action.payload
+                    state.data = action.payload
                 })
                 .addCase(upload.rejected, (state, action) => {
                     state.isLoading = false

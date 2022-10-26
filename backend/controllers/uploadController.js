@@ -1,10 +1,15 @@
 const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
 const path = require('path')
+const {upload} = require("../middlewares/multerMiddleware");
 
 const uploadImage = asyncHandler( async (req, res) => {
-    console.log(req)
-    res.status(200).json({message: "Success"})
+
+    if(!req.file){
+        res.status(401)
+        throw new Error('Image not provided')
+    }
+    res.status(200).json(req.file.filename)
 })
 
 const getImage = asyncHandler(async (req, res) => {
