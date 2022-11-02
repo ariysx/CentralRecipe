@@ -43,13 +43,17 @@ function Main(){
             <Container>
                 <h5 className="fw-700">All Recipes</h5>
                 <div className="row">
-                    {recipes.map((recipe) => (
-                        <>
-                            <div className="col-6 col-sm-6 col-md-4 col-lg-3 mt-5 mb-5" id={recipe._id}>
-                                <RecipeItem key={recipe._id} recipe={recipe}/>
-                            </div>
-                        </>
-                    ))}
+                    {recipes !== [] ? (
+                        recipes.map((recipe) => (
+                            <>
+                                <div className="col-6 col-sm-6 col-md-4 col-lg-3 mt-5 mb-5" id={recipe._id}>
+                                    <RecipeItem key={recipe._id} recipe={recipe}/>
+                                </div>
+                            </>
+                        ))
+                    ) : (
+                        <h5 className="text-center">No recipes in the database...</h5>
+                    )}
                 </div>
             </Container>
         </>

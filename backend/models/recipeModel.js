@@ -4,7 +4,8 @@ const recipeSchema = mongoose.Schema(
     {
         name: {
             type: String,
-            required: [true, 'Please provide a title']
+            required: [true, 'Please provide a title'],
+            unique: true,
         },
         image: {
             type: String,
@@ -36,6 +37,9 @@ const recipeSchema = mongoose.Schema(
         instructions: {
             type: [],
             required: [true, 'Please provide an instruction']
+        },
+        notes: {
+          type: String,
         },
         publisher: {
             type: mongoose.Schema.Types.ObjectId,

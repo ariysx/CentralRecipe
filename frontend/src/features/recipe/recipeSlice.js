@@ -9,6 +9,16 @@ const initialState = {
     message: ""
 }
 
+export const createRecipe = createAsyncThunk('recipes/submit', async(data, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token
+        return await recipeService.createRecipe(data, token)
+    } catch(e){
+        const message = (e.response && e.response.data && e.response.data.message) || e.message || e.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 export const getRecipes = createAsyncThunk('recipes/getAll', async (_, thunkAPI) => {
     try {
         return await recipeService.getRecipes();

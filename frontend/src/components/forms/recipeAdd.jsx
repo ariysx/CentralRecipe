@@ -1,21 +1,19 @@
-import React, {useEffect, useState} from 'react'
-import {Formik, Field, FieldArray,} from 'formik'
+import {Field, FieldArray, Formik, useFormikContext,} from 'formik'
 import {Button, Form, InputGroup, Spinner} from "react-bootstrap"
 import {FaTrash} from "react-icons/fa";
-import * as Yup from "yup"
 import {useDispatch, useSelector} from "react-redux";
-import {upload} from "../../features/multer/multerSlice";
+import {reset, upload} from "../../features/multer/multerSlice";
+import {createRecipe} from "../../features/recipe/recipeSlice";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
+import * as Yup from "yup";
 
 export default function FormRecipeAdd() {
 
     const dispatch = useDispatch()
-    const {multer} = useSelector((state) => state.multer)
-    const {preImg, setPreImg} = useState('')
-
-    // useEffect(() => {
-    //     setPreImg(multer.data)
-    //     }, [dispatch])
-
+    const navigate = useNavigate()
+    const {data} = useSelector((state) => state.multer)
+    // console.log(data)
     return (
         <>
             <Formik
@@ -24,20 +22,20 @@ export default function FormRecipeAdd() {
                         name: "",
                         image: null,
                         description: "",
-                        category: [''],
-                        keywords: [''],
+                        category: [""],
+                        keywords: [""],
                         duration: {
                             preparation: {
-                                unit: "",
-                                time: 0
+                                hour: 0,
+                                minute: 0,
                             },
                             cooking: {
-                                unit: "",
-                                time: 0
+                                hour: 0,
+                                minute: 0,
                             },
                             rest: {
-                                unit: "",
-                                time: 0
+                                hour: 0,
+                                minute: 0,
                             },
                         },
                         ingredients: [{
@@ -46,21 +44,44 @@ export default function FormRecipeAdd() {
                             ingredient: '',
                         }],
                         instructions: [''],
+                        notes: '',
                     }
                 }
-                // validationSchema={Yup.object({
-                //     name: Yup.string().required(),
-                //     // image: Yup.string().required(),
-                //     description: Yup.string().required(),
-                //     // tags: Yup.array().min(1).required(),
-                //     cookingTime: Yup.number().required(),
-                //     ingredients: Yup.array().min(1).max(26).required(),
-                //     instructions: Yup.array().min(1).max(15).required(),
-                // })}
+                validationSchema={Yup.object({
+                    name: Yup.string().required(),
+                    image: Yup.string().required(),
+                    description: Yup.string().required(),
+                    category: Yup.array(Yup.string().required()).min(1).required(),
+                    keywords: Yup.array(Yup.string().required()).min(1).required(),
+                    // duration: Yup.array().min(3).max(3).required(),
+                    ingredients: Yup.array().min(1).max(26).required(),
+                    instructions: Yup.array().min(1).max(15).required(),
+                })}
                 onSubmit={async (values) => {
-
-                    // return new Promise(res => setTimeout(res, 2500))
-
+                    if(values.image){
+                        const formData = new FormData()
+                        formData.append('image', values.image)
+                        dispatch(upload(formData))
+                        if(data.filename){
+                            dispatch(createRecipe({
+                                name: values.name,
+                                image: data.filename,
+                                description: values.description,
+                                category: values.category,
+                                keywords: values.keywords,
+                                duration: values.duration,
+                                ingredients: values.ingredients,
+                                instructions: values.instructions,
+                                notes: values.notes,
+                            }))
+                            dispatch(reset)
+                            toast.success('You have submitted a new recipe!')
+                        } else {
+                            toast.error('Image upload failed, please try again')
+                        }
+                    } else {
+                        toast.error('Please provide an image')
+                    }
                 }
                 }>
                 {({
@@ -84,22 +105,14 @@ export default function FormRecipeAdd() {
                                           value={values.name}
                             />
                         </Form.Group>
-                        {console.log(values.image)}
-                        {values.image ? (<img className="m-auto d-block" src={URL.createObjectURL(values.image)} alt=""/>) : null}
+                        {values.image ? (<img className="m-auto d-block rounded-circle" style={{width: '200px', height: '200px', objectFit: 'cover'}} src={URL.createObjectURL(values.image)} alt=""/>) : null}
                         <Form.Group className="mb-3">
                             <Form.Label>Recipe Image</Form.Label>
                             <InputGroup>
-                                {/*<Field type="file" name="image" className="form-control"/>*/}
                                 <input id="image" name="image" type="file" accept='image/*' onChange={(event) => {
                                     setFieldValue('image', event.currentTarget.files[0])
                                 }}
                                        className="form-control"/>
-                                {/*<img src={values.image} alt=""/>*/}
-                                <Button variant={"primary"} onClick={() => {
-                                    const formData = new FormData()
-                                    formData.append('image', values.image)
-                                    dispatch(upload(formData))
-                                }}>Upload</Button>
                             </InputGroup>
                         </Form.Group>
 
@@ -114,10 +127,6 @@ export default function FormRecipeAdd() {
 
                         <Form.Group className="mb-3">
                             <Form.Label>Category</Form.Label>
-                            {/*<Form.Control type="text" name="ingredients"*/}
-                            {/*              onChange={handleChange}*/}
-                            {/*              onBlur={handleBlur}*/}
-                            {/*              value={values.ingredients}/>*/}
                             <FieldArray name="category">
                                 {({push, remove}) => (
                                     <>
@@ -126,7 +135,7 @@ export default function FormRecipeAdd() {
                                                 <InputGroup>
                                                     <Field name={`category[${index}]`} as="select"
                                                            className="form-select">
-                                                        <option value="" selected={true} disabled={true}>Select a
+                                                        <option value="" defaultValue={true} disabled={true}>Select a
                                                             Category
                                                         </option>
                                                         <option value="appetizer">Appetizers</option>
@@ -196,35 +205,33 @@ export default function FormRecipeAdd() {
                         <Form.Group className="mb-3">
                             <Form.Label>Preperation Time</Form.Label>
                             <InputGroup>
-                                <Field name="duration['preparation'].time" className="form-control col-1"
-                                       type="number"/>
-                                <Field name="duration['preparation'].unit" className="form-select" as="select">
-                                    <option value="minute">Minutes</option>
-                                    <option value="hour">Hours</option>
-                                </Field>
+                                <Field name="duration['preparation'].hour" className="form-control col-1"
+                                       type="number" min="0" max="23"/>
+                                <Button variant="disabled">Hour</Button>
+                                <Field name="duration['preparation'].minute" className="form-control" type="number" min="0" max="59"/>
+                                <Button variant="disabled">Minute</Button>
                             </InputGroup>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>Cooking Time</Form.Label>
                             <InputGroup>
-                                <Field name="duration['cooking'].time" className="form-control col-1"
-                                       type="number"/>
-                                <Field name="duration['cooking'].unit" className="form-select" as="select">
-                                    <option value="minute">Minutes</option>
-                                    <option value="hour">Hours</option>
-                                </Field>
+                                <Field name="duration['cooking'].hour" className="form-control col-1"
+                                       type="number" min="0" max="23"/>
+                                <Button variant="disabled">Hour</Button>
+                                <Field name="duration['cooking'].minute" className="form-control" type="number" min="0" max="59"/>
+                                <Button variant="disabled">Minute</Button>
                             </InputGroup>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>Rest Time</Form.Label>
                             <InputGroup>
-                                <Field name="duration['rest'].time" className="form-control col-1" type="number"/>
-                                <Field name="duration['rest'].unit" className="form-select" as="select">
-                                    <option value="minute">Minutes</option>
-                                    <option value="hour">Hours</option>
-                                </Field>
+                                <Field name="duration['rest'].hour" className="form-control col-1"
+                                       type="number" min="0" max="23"/>
+                                <Button variant="disabled">Hour</Button>
+                                <Field name="duration['rest'].minute" className="form-control" type="number" min="0" max="59"/>
+                                <Button variant="disabled">Minute</Button>
                             </InputGroup>
                         </Form.Group>
 
@@ -244,7 +251,7 @@ export default function FormRecipeAdd() {
                                                            className="form-control" type="number"/>
                                                     <Field name={`ingredients[${index}].unit`} as="select"
                                                            className="form-select">
-                                                        <option value="" selected={true} disabled={true}>Select a
+                                                        <option value="" defaultValue={true} disabled={true}>Select a
                                                             Unit
                                                         </option>
                                                         <option value="g">Grams (g)</option>
@@ -316,6 +323,14 @@ export default function FormRecipeAdd() {
                                     </>
                                 )}
                             </FieldArray>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Notes</Form.Label>
+                            <InputGroup>
+                                <Field name="notes" className="form-control"
+                                       as="textarea"/>
+                            </InputGroup>
                         </Form.Group>
 
                         <Button variant="primary" type="submit" disabled={isSubmitting}>

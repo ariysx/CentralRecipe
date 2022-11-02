@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = 'api/recipe'
+const API_URL = '/api/recipe'
 const createRecipe = async (recipeData, token) => {
     const config = {
         headers: {

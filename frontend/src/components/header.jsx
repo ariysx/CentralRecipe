@@ -1,9 +1,10 @@
-import React from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, {useEffect} from "react";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 
 import LogoIcon from '../resources/img/icons8-cooking-book-90.png'
 import {InputGroup, Button, Container, Nav, Navbar, Form, Dropdown} from "react-bootstrap";
 import {
+    FaBars,
     FaBoxes,
     FaGlasses,
     FaHeart,
@@ -15,6 +16,7 @@ import {
 import {useSelector, useDispatch} from "react-redux";
 import {logout, reset as authReset} from "../features/auth/authSlice";
 import {reset as favReset} from "../features/favourite/favouriteSlice"
+import {toast} from "react-toastify";
 
 function Header(){
 
@@ -22,7 +24,35 @@ function Header(){
     const dispatch = useDispatch()
     const { user } = useSelector((state) => state.auth)
 
+    const parseJwt = (token) => {
+        try {
+            return JSON.parse(atob(token.split(".")[1]))
+        } catch (e) {
+            return null
+        }
+    };
+
+    const AuthVerify = (props) => {
+        let location = useLocation()
+
+        useEffect(() => {
+            const user = JSON.parse(localStorage.getItem("user"))
+
+            if (user) {
+                const decodedJwt = parseJwt(user.token)
+
+                if (decodedJwt.exp * 1000 < Date.now()) {
+                    toast.warn('Login token expired')
+                    onLogout()
+                }
+            }
+        }, [location, props])
+    }
+
+    AuthVerify()
+
     const onLogout = () => {
+        toast.warn(`Logged out of ${JSON.parse(localStorage.getItem('user'))['name']}`)
         dispatch(logout())
         dispatch(authReset())
         navigate('/')
@@ -54,18 +84,19 @@ function Header(){
                                     <Form.Control
                                         placeholder="Search recipes, users..."
                                         aria-label="Search"
-                                        className="me-1 rounded-custom"
+                                        className=""
                                     />
-                                    <Button type='submit' variant='outline-success' className='rounded-custom position-relative right-0'><FaSearch /></Button>
+                                    <Button type='submit' variant='outline-success' className=' position-relative right-0'><FaSearch /></Button>
                                 </InputGroup>
                             </Form>
                         </Nav>
                         <Nav className="w-50 justify-content-end pe-0 pe-lg-5">
                             {user ? (
                                 <>
+                                    <Button variant="outline-primary"><FaHeart/> Favourites</Button>
                                     <Dropdown>
-                                        <Dropdown.Toggle variant="success" id="dropdown-basic" className="rounded-custom">
-                                            <FaUser/>
+                                        <Dropdown.Toggle variant="outline-primary" id="dropdown-basic" className="">
+                                            <FaBars /> Menu
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>

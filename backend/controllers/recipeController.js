@@ -41,19 +41,23 @@ const createRecipe = asyncHandler(async (req, res) => {
         throw new Error('User not found')
     }
 
-    const {name, body, ingredients, instructions, images } = req.body
-
-    if(!name || !body || !ingredients || !instructions || !images ){
-        res.status(400)
-        throw new Error('Please provide all fields')
-    }
+    const {name, image, description, category, keywords, duration, ingredients, instructions, notes } = req.body
+    //
+    // if(!name || !body || !ingredients || !instructions || !images ){
+    //     res.status(400)
+    //     throw new Error('Please provide all fields')
+    // }
 
     const recipe = await Recipe.create({
         name,
-        body,
+        image,
+        description,
+        category,
+        keywords,
+        duration,
         ingredients,
         instructions,
-        images,
+        notes,
         publisher: user
     })
 

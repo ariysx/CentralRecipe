@@ -6,6 +6,7 @@ const colors = require("colors")
 
 // Establish Mongo DB connection through mongoose
 const { connectDB } = require("./configs/db")
+const path = require("path");
 connectDB()
 
 // Pulling port from dotENV on 'PORT'
@@ -16,7 +17,7 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
-
+app.use(express.static('upload'))
 
 // Create default routes
 app.use('/api/user', require('./routes/userRoutes'))

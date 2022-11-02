@@ -28,7 +28,6 @@ const login = async (userData) => {
 
 // remove user from local storage
 const logout = () => {
-    toast.warn(`Logged out of ${JSON.parse(localStorage.getItem('user'))['name']}`)
     localStorage.removeItem('user')
     localStorage.removeItem('favourites')
 }

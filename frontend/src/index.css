@@ -79,9 +79,9 @@ button.btn-like.false {
 
 .cardImage img {
     display: block;
-    height: auto;
-    width: 100%;
-    object-fit: contain;
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
     border-radius: 50%;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
