@@ -4,6 +4,7 @@ import {useEffect} from "react";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
+import DashboardMenu from "../../components/dashboard/menu";
 
 export default function NewRecipe(){
 
@@ -20,12 +21,13 @@ export default function NewRecipe(){
 
     return(
         <>
-            <div className="navbarSpacer">
-            </div>
             <Container>
-                <h5>New Recipe</h5>
                 <div className="row">
-                    <div className="col">
+                    <div className="col-3">
+                        <DashboardMenu active="/dashboard/recipes/new"/>
+                    </div>
+                    <div className="col-9">
+                        <h5>New Recipe</h5>
                         <FormRecipeAdd/>
                     </div>
                 </div>

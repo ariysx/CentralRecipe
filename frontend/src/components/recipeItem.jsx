@@ -1,4 +1,4 @@
-import {Button, Card} from "react-bootstrap";
+import {Badge, Button, Card} from "react-bootstrap";
 import {FaClock, FaHeart} from "react-icons/fa";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import { pullFavourite, pushFavourite} from "../features/favourite/favouriteSlice";
 import {get, reset} from "../features/multer/multerSlice";
+import {FiClock} from "react-icons/fi";
 
 function RecipeItem({recipe}) {
 
@@ -33,12 +34,14 @@ function RecipeItem({recipe}) {
     }, [user, recipe, favourites, dispatch, navigate])
     // console.log(!!(favourites && favourites.includes(recipe._id)), isFavourite)
 
-    const onLike = () => {
+    const onLike = (e) => {
         if(!user){ // Not signed in
             toast.warning('You must be signed in to do this!')
             navigate('/login')
             return
         }
+
+        if(e && e.stopPropagation) e.stopPropagation();
 
         if(isFavourite) { // Already favourite
             setFavourite(!isFavourite)
@@ -73,26 +76,42 @@ function RecipeItem({recipe}) {
         }
     }
 
+    const handleClick = (e) => {
+        toast.success("You clicked on " + recipe.name)
+    }
+
     return(
         <>
-            <Card style={{ width: '100%'}} className="recipeCard m-auto rounded-5">
-                <div className="cardImage">
+            <Card style={{ width: '100%'}} className="recipeCard m-auto rounded-5" onClick={handleClick}>
+                <div className="cardImage d-flex align-items-center justify-content-center align-content-center">
                     <img src={`http://localhost:8000/api/upload/${recipe.image}`} alt={recipe.name}/>
                 </div>
-                <Card.Body className="pt-0 pb-0" style={{transform: 'translateY(-25%)'}}>
-                    <Card.Title>{recipe.name}</Card.Title>
+                <Card.Body className="p-0 mt-3">
+                    <Card.Title className="fw-bold fs-5">
+                        {recipe.name}
+                        <br/>
+                            {recipe.keywords.map((item, index) => index < 3 && (
+                                <>
+                                <Badge pill bg="primary" className="me-1">
+                                    {item}
+                                </Badge>
+                                </>
+                            ))}
+                    </Card.Title>
                     {/*<Card.Text className="heart"><FaHeart /> <span>{recipe.likes}</span></Card.Text>*/}
+                </Card.Body>
+                <Card.Footer>
                     <div className="row align-items-center ">
-                        <div className="col">
-                            <p className="m-auto"><FaClock/>{getDuration()}</p>
-                            </div>
-                        <div className="col text-end">
-                            <span>{numLikes} Likes </span>
+                        <div className="col p-0 justify-content-center align-items-center">
                             {/*{console.log(recipe.name + " // " + numLikes + " // " + isFavourite + " // " + !!(favourites && favourites.includes(recipe._id)))}*/}
                             <Button variant="outline-danger" className={`btn-like ${isFavourite}`} onClick={() => onLike()}><FaHeart /> </Button>
+                            <span className="ms-2">{numLikes}</span>
+                        </div>
+                        <div className="col p-0">
+                            <p className="m-auto text-end"><FiClock/> {getDuration()}</p>
                         </div>
                     </div>
-                </Card.Body>
+                </Card.Footer>
             </Card>
         </>
     )

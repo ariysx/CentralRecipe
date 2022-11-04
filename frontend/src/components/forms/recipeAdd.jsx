@@ -7,6 +7,7 @@ import {createRecipe} from "../../features/recipe/recipeSlice";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import * as Yup from "yup";
+import {useEffect, useState} from "react";
 
 export default function FormRecipeAdd() {
 
@@ -14,6 +15,12 @@ export default function FormRecipeAdd() {
     const navigate = useNavigate()
     const {data} = useSelector((state) => state.multer)
     // console.log(data)
+    const [imgName, setImgName] = useState();
+
+    useEffect(() => {
+        setImgName(data.filename)
+    }, [dispatch, data])
+
     return (
         <>
             <Formik
@@ -62,10 +69,10 @@ export default function FormRecipeAdd() {
                         const formData = new FormData()
                         formData.append('image', values.image)
                         dispatch(upload(formData))
-                        if(data.filename){
+                        if(imgName){
                             dispatch(createRecipe({
                                 name: values.name,
-                                image: data.filename,
+                                image: imgName,
                                 description: values.description,
                                 category: values.category,
                                 keywords: values.keywords,
@@ -138,26 +145,23 @@ export default function FormRecipeAdd() {
                                                         <option value="" defaultValue={true} disabled={true}>Select a
                                                             Category
                                                         </option>
-                                                        <option value="appetizer">Appetizers</option>
-                                                        <option value="condiment">Condiments</option>
-                                                        <option value="confectionery">Confectionery</option>
-                                                        <option value="dessert">Desserts</option>
-                                                        <option value="dips">Dips, pastes and spreads</option>
-                                                        <option value="dried">Dried foods</option>
-                                                        <option value="dumpling">Dumplings</option>
-                                                        <option value="fast">Fast food</option>
-                                                        <option value="fermented">Fermented foods</option>
-                                                        <option value="halal">Halal food</option>
-                                                        <option value="kosher">Kosher food</option>
-                                                        <option value="noodle">Noodles</option>
-                                                        <option value="pasta">Pasta</option>
-                                                        <option value="pie">Pies</option>
-                                                        <option value="salad">Salads</option>
-                                                        <option value="sandwich">Sandwiches</option>
-                                                        <option value="sauce">Sauces</option>
-                                                        <option value="snack">Snack foods</option>
-                                                        <option value="soup">Soups</option>
-                                                        <option value="stew">Stews</option>
+                                                        <option value='Burgers'>Burgers</option>
+                                                        <option value='American'>American</option>
+                                                        <option value='Chicken'>Chicken</option>
+                                                        <option value='Dessert'>Dessert</option>
+                                                        <option value='Japanese'>Japanese</option>
+                                                        <option value='Sushi'>Sushi</option>
+                                                        <option value='Chinese'>Chinese</option>
+                                                        <option value='Vegan'>Vegan</option>
+                                                        <option value='Sandwiches'>Sandwiches</option>
+                                                        <option value='Asian'>Asian</option>
+                                                        <option value='Kebab'>Kebab</option>
+                                                        <option value='Salads'>Salads</option>
+                                                        <option value='Pizza'>Pizza</option>
+                                                        <option value='Thai'>Thai</option>
+                                                        <option value='Indian'>Indian</option>
+                                                        <option value='Healthy'>Healthy</option>
+                                                        <option value='Italian'>Italian</option>
                                                     </Field>
                                                     {values.category.length === 1 ? null : (
                                                         <Button variant={"danger"} onClick={() => {
@@ -336,7 +340,7 @@ export default function FormRecipeAdd() {
                         <Button variant="primary" type="submit" disabled={isSubmitting}>
                             {isSubmitting ? <Spinner animation={"border"}/> : 'Submit'}
                         </Button>
-                        <pre>{JSON.stringify({values, errors}, null, 4)}</pre>
+                        <pre>{JSON.stringify({errors}, null, 4)}</pre>
                     </Form>
                     </>
                 )}

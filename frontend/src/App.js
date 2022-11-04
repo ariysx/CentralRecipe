@@ -9,8 +9,9 @@ import Header from "./components/header";
 
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import MyRecipes from "./pages/dashboard/myRecipes";
+import Recipes from "./pages/dashboard/recipes";
 import NewRecipe from "./pages/dashboard/newRecipe";
+import Favourites from "./pages/dashboard/favourites";
 
 function App() {
   return (
@@ -21,8 +22,10 @@ function App() {
                   <Routes>
                       <Route path='/' element={<Main/>}/>
                       <Route path='/dashboard' element={<Dashboard/>}/>
-                      <Route path='/dashboard/recipes' element={<MyRecipes/>}/>
+                      <Route path='/dashboard/recipes' element={<Recipes/>}/>
                       <Route path='/dashboard/recipes/new' element={<NewRecipe/>}/>
+                      <Route path='/dashboard/favourites' element={<Favourites/>}/>
+                      <Route path='/dashboard/profile' element={<NewRecipe/>}/>
                       <Route path='/login' element={<Login/>}/>
                       <Route path='/register' element={<Register/>}/>
                   </Routes>

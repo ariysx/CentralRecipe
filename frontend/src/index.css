@@ -1,7 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
+:root {
+    --border-radius: 3.5rem;
+}
+
 body {
     font-family: 'Poppins', sans-serif !important;
+}
+
+.rounded-custom {
+    border-radius: var(--border-radius) !important;
+}
+
+.flex-1 {
+    flex: 1 !important;
+}
+
+.flex-3 {
+    flex: 3 !important;
+}
+
+.ps-4-5 {
+    padding-left: 2.5rem !important;
+}
+
+.menu {
+}
+
+.menu.false {
+    display: none;
+}
+
+.menu.true {
+    display: block;
+}
+
+
+.btn-black {
+    background: black !important;
+    border-radius: var(--border-radius) !important;
+    color: white !important;
+    transition: ease 0.15s !important;
+    border: 1px solid transparent !important;
+    padding-right: 1rem !important;
+    padding-left: 1rem !important;
+}
+
+.btn-black:hover {
+    background: transparent !important;
+    color: black !important;
+    border: 1px solid black !important;
 }
 
 .navbar a {
@@ -21,27 +69,12 @@ body {
     font-weight: 700;
 }
 
-.rounded-custom {
-    border-radius: 3.5rem !important;
-}
-
 .right-0 {
     right: 0 !important;
 }
 
 .navbarSpacer {
-    margin-top: 5rem !important;
-}
-
-.recipeCard {
-    outline: none !important;
-    border: none !important;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    transition: box-shadow ease 0.3s;
-}
-
-.recipeCard:hover {
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 29px 0px;
+    margin-top: 7.5rem !important;
 }
 
 .mt-10 {
@@ -53,7 +86,7 @@ body {
     border: none !important;
     background: rgba(0,0,0,0.05) !important;
     color: lightgray !important;
-    font-size: 1.5rem !important;
+    font-size: 1.25rem !important;
     border-radius: 50% !important;
 }
 
@@ -70,19 +103,34 @@ button.btn-like.false {
     /*color: lightgray !important;*/
 }
 
+
+.recipeCard {
+    outline: none !important;
+    border: none !important;
+    transition: box-shadow ease 0.15s;
+}
+
+.recipeCard:hover {
+    cursor: pointer;
+}
+
+.recipeCard .card-footer {
+    background: none !important;
+    border: none !important;
+}
+
 .cardImage {
-    max-height: 200px !important;
-    max-width: 200px;
     margin: auto;
-    transform: translateY(-25%);
+    height: 12.5rem;
+    width: 100%;
 }
 
 .cardImage img {
+    border-radius: 1rem;
     display: block;
-    height: 200px;
-    width: 200px;
+    height: 100%;
+    width: 100%;
     object-fit: cover;
-    border-radius: 50%;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
@@ -138,4 +186,81 @@ button.btn-like.false {
 .heart {
     color: #fc5353;
     vertical-align: middle !important;
+}
+
+.hero {
+    background: rgba(233, 196, 148, 0.5);
+}
+
+.btn-main-category {
+    background: rgba(0, 0, 0, 0.05) !important;
+    color: white !important;
+    transition: ease 0.3s !important;
+    padding: 1rem !important;
+}
+
+.btn-main-category:hover {
+    background: rgba(0,0,0,0.1) !important;
+    color: black !important;
+}
+
+.splide__arrow--prev {
+    left: -1.5rem !important;
+}
+
+.splide__arrow--next {
+    right: -1.5rem !important;
+}
+
+.dropdown-menu {
+    width: 250px !important;
+}
+
+.dropdown-item {
+    transition: ease 0.15s !important;
+    cursor: pointer !important;
+}
+
+.dropdown-toggle::after {
+    content: none !important;
+}
+
+.stats-card {
+    background: rgba(0,0,0,0.05);
+}
+
+.dashboard-menu a.list-group-item.active.list-group-item-action {
+    background: none !important;
+    color: initial !important;
+    border: transparent 1px solid;
+}
+
+.dashboard-menu a.list-group-item.active.list-group-item-action::after {
+    content: '';
+    height: 50%;
+    width: 5px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    border-radius: 0.25rem;
+    background-color: mediumseagreen;
+}
+
+.dashboard-menu a.list-group-item.list-group-item-action, .btn.btn-dashboard-menu {
+    cursor: pointer;
+    border: transparent 1px solid;
+    padding: 0.5rem 1rem !important;
+    display: block !important;
+    width: 100%;
+    text-align: left !important;
+}
+
+.dashboard-menu a.list-group-item.active.list-group-item-action .btn-dashboard-menu {
+    padding: 0.5rem 1rem !important;
+    display: block !important;
+    width: 100%;
+    text-align: left !important;
+    background: rgba(144, 238, 144, 0.25) !important;
 }
