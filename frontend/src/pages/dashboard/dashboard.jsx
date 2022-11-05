@@ -51,13 +51,13 @@ function Dashboard(){
             <section id="dashboard">
                 <Container>
                     <div className="row">
-                        <div className="col-12 col-sm-3">
+                        <div className="col-12 col-md-3">
                             <DashboardMenu active="/dashboard"/>
                         </div>
-                        <div className="col-12 col-sm-6">
+                        <div className="col-12 col-md-6">
                             <h5 className="fw-700">Overview</h5>
                         </div>
-                        <div className="col-12 col-sm-3">
+                        <div className="col-12 col-md-3">
                             <div className="dashboard-me text-center">
                                 <div className="dashboard-me-image mb-3">
                                     <img src={`http://localhost:8000/api/upload/${user.picture}`} alt=""/>

@@ -54,8 +54,8 @@ function Header() {
 
     const [menu, setMenu] = useState(false);
     const menuToggle = () => {
-        console.log(menu)
         setMenu(!menu)
+        console.log("hidden: " + menu)
     }
 
     const onLogout = () => {
@@ -64,8 +64,8 @@ function Header() {
         dispatch(favReset())
         dispatch(userReset())
         dispatch(multerReset())
-        dispatch(recipeReset())
         navigate('/')
+        setMenu(true)
         dispatch(logout())
     }
 
@@ -152,7 +152,7 @@ function Header() {
 
                                     <Link to="/"><Nav.Link href="/" className="d-block text-start"><FiSearch/> Browse</Nav.Link></Link>
                                     <Link to="/dashboard"><Nav.Link href="/dashboard" className="d-block text-start"><FiBox/> Dashboard</Nav.Link></Link>
-                                    <Link to="/dashboard/favourite"><Nav.Link href="/dashboard/favourite" className="d-block text-start"><FiHeart/> Favourites</Nav.Link></Link>
+                                    <Link to="/dashboard/favourites"><Nav.Link href="/dashboard/favourites" className="d-block text-start"><FiHeart/> Favourites</Nav.Link></Link>
                                     <Link to="/dashboard/profile"><Nav.Link href="/dashboard/profile" className="d-block text-start"><FiUser/> Profile</Nav.Link></Link>
                                     <Nav.Link href="" onClick={onLogout} className="fw-bold fw-700" style={{color: '#e55039'}}><FiLogOut/> Logout</Nav.Link>
 

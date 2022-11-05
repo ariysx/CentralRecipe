@@ -1,6 +1,6 @@
 import {Button, Container, Form} from "react-bootstrap";
 import FormRecipeAdd from "../../components/forms/recipeAdd";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
@@ -23,10 +23,10 @@ export default function NewRecipe(){
         <>
             <Container>
                 <div className="row">
-                    <div className="col-3">
+                    <div className="col-12 col-md-3">
                         <DashboardMenu active="/dashboard/recipes/new"/>
                     </div>
-                    <div className="col-9">
+                    <div className="col-12 col-md-9">
                         <h5>New Recipe</h5>
                         <FormRecipeAdd/>
                     </div>

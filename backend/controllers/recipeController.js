@@ -125,10 +125,7 @@ const deleteRecipe = asyncHandler(async (req, res) => {
 
     await Recipe.findByIdAndDelete(req.params.id)
 
-    res.status(200).json({
-        publisher: `Removed from publisher: ${req.user.id}`,
-        message: `Delete Recipe ${req.params.id}`,
-    })
+    res.status(200).json({ id: req.params.id })
 
 })
 

@@ -46,6 +46,15 @@ export const getRecipeByUser = createAsyncThunk('recipes/get/user', async(id, th
     }
 })
 
+export const deleteRecipe = createAsyncThunk('recipe/delete', async(id, thunkAPI) => {
+    try {
+        return await recipeService.deleteRecipe(id, thunkAPI.getState().auth.user.token);
+    } catch (e){
+        const message = (e.response && e.response.data && e.response.data.message) || e.message || e.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 export const recipeSlice = createSlice(
     {
         name: "recipes",
@@ -90,6 +99,19 @@ export const recipeSlice = createSlice(
                     state.recipes = action.payload
                 })
                 .addCase(getRecipeByUser.rejected, (state, action) => {
+                    state.isLoading = false
+                    state.isError = true
+                    state.message = action.payload
+                })
+                .addCase(deleteRecipe.pending, (state) => {
+                    state.isLoading = true
+                })
+                .addCase(deleteRecipe.fulfilled, (state, action) => {
+                    state.isLoading = false
+                    state.isSuccess = true
+                    state.recipes = state.recipes.filter((recipe) => recipe._id !== action.payload.id)
+                })
+                .addCase(deleteRecipe.rejected, (state, action) => {
                     state.isLoading = false
                     state.isError = true
                     state.message = action.payload
