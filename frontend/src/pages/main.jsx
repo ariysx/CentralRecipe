@@ -9,12 +9,15 @@ import {getFavourites, reset as favouriteReset} from "../features/favourite/favo
 
 import heroImg from '../resources/img/Chef-bro.svg'
 import {Splide, SplideSlide} from "@splidejs/react-splide";
+import {reset as resetUsers} from "../features/user/userSlice";
 
 function Main(){
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    dispatch(favouriteReset())
+    // dispatch(favouriteReset())
+
+    const {user} = useSelector((state) => state.auth)
 
     const { recipes, isLoading, isError, message } = useSelector((state) => state.recipe)
 
@@ -29,7 +32,8 @@ function Main(){
 
         return () => {
             dispatch(reset())
-            dispatch(favouriteReset())
+            dispatch(resetUsers())
+            // dispatch(favouriteReset())
         }
     }, [])
 
@@ -80,13 +84,13 @@ function Main(){
 
     return(
         <>
-            <section id="hero">
+            <section id="hero" className={user ? "d-none" : "d-block"}>
                 <Container>
                     <div className="hero rounded-custom mb-5">
                         <div className="row justify-content-center align-content-center align-items-center">
                             <div className="col-4">
-                                <h3 className="fw-700"><img src="https://img.icons8.com/doodle/96/cooking-book.png" width="64" alt=""/> Let's Get Cooking!</h3>
-                                <p>Central Recipe, recipes for all your cooking needs. Get started now with the most popular recipe!
+                                <h3 className="fw-700">Cook easy with CentralRecipe</h3>
+                                <p>Let's get cooking!
                                 </p>
                                 <Button variant="black me-1">Most Popular</Button><span>or</span>
                                 <Button variant="black ms-1">Explore Menu</Button>
@@ -115,7 +119,7 @@ function Main(){
                             <>
                                 <SplideSlide>
                                     {/*{console.log("<option value=\'" + item + "\'>" + item + "</option>")}*/}
-                                    <div className="categoryItem text-center">
+                                    <div className="categoryItem text-center" id={`mainSplide${index}`}>
                                         <Button variant="main-category"><img src={categoriesImage[index]} width="48"
                                                                        height="48"/></Button><br/>
                                         {item}

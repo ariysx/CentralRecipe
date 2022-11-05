@@ -66,10 +66,6 @@ function Register(){
 
     return(
         <>
-
-            <div className="navbarSpacer">
-            </div>
-
             <section className="container text-center mt-3">
                 <h1 className="fw-700">Register</h1>
                 <p>Create an account by filling out the form below</p>

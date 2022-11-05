@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = 'api/user/favourite/'
+const API_URL = '/api/user/favourite/'
 
 const getFavourites = async (token) => {
     const config = {
@@ -8,7 +8,7 @@ const getFavourites = async (token) => {
             Authorization: `Bearer ${token}`,
         },
     }
-    const response = await axios.get(API_URL, config)
+    const response = await axios.get(API_URL + "fixBrokenRoute", config)
     return response.data
 }
 

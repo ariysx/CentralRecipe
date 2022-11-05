@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux";
 import {toast} from "react-toastify";
 import {logout, reset as authReset} from "../../features/auth/authSlice";
 import {reset as favReset} from "../../features/favourite/favouriteSlice";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 export default function DashboardMenu({active}){
 
@@ -22,22 +22,32 @@ export default function DashboardMenu({active}){
 
     return (
         <>
-            <ListGroup defaultActiveKey={active} className="dashboard-menu sticky-top" style={{top: '7rem'}}>
-                <ListGroup.Item action href="/dashboard">
-                    <Button variant="dashboard-menu"><FiBox/> Dashboard</Button>
-                </ListGroup.Item>
-                <ListGroup.Item action href="/dashboard/recipes/new">
-                    <Button variant="dashboard-menu"><FiPlusCircle/> Submit Recipe</Button>
-                </ListGroup.Item>
-                <ListGroup.Item action href="/dashboard/recipes">
-                    <Button variant="dashboard-menu"><FiBook/> My Recipes</Button>
-                </ListGroup.Item>
-                <ListGroup.Item action href="/dashboard/favourites">
-                    <Button variant="dashboard-menu"><FiHeart/> Favourites</Button>
-                </ListGroup.Item>
-                <ListGroup.Item action href="/dashboard/profile">
-                    <Button variant="dashboard-menu"><FiUser/> Profile</Button>
-                </ListGroup.Item>
+            <ListGroup defaultActiveKey={active} className="dashboard-menu position-sticky" style={{top: '6rem'}}>
+                <Link to="/dashboard">
+                    <ListGroup.Item action href="/dashboard">
+                        <Button variant="dashboard-menu"><FiBox/> Dashboard</Button>
+                    </ListGroup.Item>
+                </Link>
+                <Link to="/dashboard/recipes/new">
+                    <ListGroup.Item action href="/dashboard/recipes/new">
+                        <Button variant="dashboard-menu"><FiPlusCircle/> Submit Recipe</Button>
+                    </ListGroup.Item>
+                </Link>
+                <Link to="/dashboard/recipes">
+                    <ListGroup.Item action href="/dashboard/recipes">
+                        <Button variant="dashboard-menu"><FiBook/> My Recipes</Button>
+                    </ListGroup.Item>
+                </Link>
+                <Link to="/dashboard/favourites">
+                    <ListGroup.Item action href="/dashboard/favourites">
+                        <Button variant="dashboard-menu"><FiHeart/> Favourites</Button>
+                    </ListGroup.Item>
+                </Link>
+                <Link to="/dashboard/profile">
+                    <ListGroup.Item action href="/dashboard/profile">
+                        <Button variant="dashboard-menu"><FiUser/> Profile</Button>
+                    </ListGroup.Item>
+                </Link>
                 <ListGroup.Item action href="/">
                     <Button variant="dashboard-menu fw-bold" style={{color: '#e55039'}} onClick={onLogout}><FiLogOut/> Logout</Button>
                 </ListGroup.Item>

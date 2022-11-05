@@ -28,6 +28,24 @@ export const getRecipes = createAsyncThunk('recipes/getAll', async (_, thunkAPI)
     }
 })
 
+export const getRecipe = createAsyncThunk('recipes/get', async (id, thunkAPI) => {
+    try {
+        return await recipeService.getRecipe(id);
+    } catch (e){
+        const message = (e.response && e.response.data && e.response.data.message) || e.message || e.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+export const getRecipeByUser = createAsyncThunk('recipes/get/user', async(id, thunkAPI) => {
+    try {
+        return await recipeService.getRecipeByUser(id);
+    } catch (e){
+        const message = (e.response && e.response.data && e.response.data.message) || e.message || e.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 export const recipeSlice = createSlice(
     {
         name: "recipes",
@@ -46,6 +64,32 @@ export const recipeSlice = createSlice(
                     state.recipes = action.payload
                 })
                 .addCase(getRecipes.rejected, (state, action) => {
+                    state.isLoading = false
+                    state.isError = true
+                    state.message = action.payload
+                })
+                .addCase(getRecipe.pending, (state) => {
+                    state.isLoading = true
+                })
+                .addCase(getRecipe.fulfilled, (state, action) => {
+                    state.isLoading = false
+                    state.isSuccess = true
+                    state.recipes = action.payload
+                })
+                .addCase(getRecipe.rejected, (state, action) => {
+                    state.isLoading = false
+                    state.isError = true
+                    state.message = action.payload
+                })
+                .addCase(getRecipeByUser.pending, (state) => {
+                    state.isLoading = true
+                })
+                .addCase(getRecipeByUser.fulfilled, (state, action) => {
+                    state.isLoading = false
+                    state.isSuccess = true
+                    state.recipes = action.payload
+                })
+                .addCase(getRecipeByUser.rejected, (state, action) => {
                     state.isLoading = false
                     state.isError = true
                     state.message = action.payload

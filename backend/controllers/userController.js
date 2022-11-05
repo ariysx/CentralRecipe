@@ -27,7 +27,7 @@ const getMe = asyncHandler (async (req, res) => {
 // @route GET /api/user/:id
 // @access Public
 const getUser = asyncHandler( async(req, res) => {
-    const user = await User.find({username: req.params.id}).select("-password")
+    const user = await User.find({_id: req.params.id}).select("-password")
     res.status(200).json(user)
 })
 
@@ -55,13 +55,14 @@ const registerUser = asyncHandler (async (req, res) => {
         username,
         name,
         email,
-        password: hashedPassword
+        password: hashedPassword,
     })
     if(user){
         res.status(201).json({
             _id: user.id,
             name: user.name,
             email: user.email,
+            picture: user.picture,
             token: generateToken(user.id)
         })
     } else {
@@ -90,6 +91,7 @@ const authenticateUser = asyncHandler (async (req, res) => {
             username: user.username,
             name: user.name,
             email: user.email,
+            picture: user.picture,
             token: generateToken(user.id)
         })
     } else {

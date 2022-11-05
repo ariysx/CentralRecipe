@@ -77,8 +77,6 @@ function Login(){
 
     return(
         <>
-            <div className="navbarSpacer">
-            </div>
             <section className="container text-center mt-3">
                 <h1 className="fw-700">Login</h1>
                 {/*<p>Already have an account?</p>*/}

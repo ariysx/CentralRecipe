@@ -41,6 +41,10 @@ const recipeSchema = mongoose.Schema(
         notes: {
           type: String,
         },
+        servings: {
+            type: Number,
+            required: [true, 'Please provide a number for servings']
+        },
         publisher: {
             type: mongoose.Schema.Types.ObjectId,
             required: [true, 'Please provide a publisher'],

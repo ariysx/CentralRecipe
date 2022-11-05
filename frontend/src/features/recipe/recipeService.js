@@ -16,6 +16,11 @@ const getRecipes = async () => {
     return response.data
 }
 
+const getRecipe = async (id) => {
+    const response = await axios.get(API_URL + "/" + id)
+    return response.data
+}
+
 const deleteRecipe = async (recipeId, token) => {
     const config = {
         headers: {
@@ -26,10 +31,17 @@ const deleteRecipe = async (recipeId, token) => {
     return response.data
 }
 
+const getRecipeByUser = async (id) => {
+    const response = await axios.get(API_URL + "/user/" + id)
+    return response.data
+}
+
 const recipeService = {
     createRecipe,
     getRecipes,
+    getRecipe,
     deleteRecipe,
+    getRecipeByUser,
 }
 
 export default recipeService

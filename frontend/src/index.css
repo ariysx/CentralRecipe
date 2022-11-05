@@ -8,6 +8,10 @@ body {
     font-family: 'Poppins', sans-serif !important;
 }
 
+a {
+    text-decoration: none !important;
+}
+
 .rounded-custom {
     border-radius: var(--border-radius) !important;
 }
@@ -81,18 +85,25 @@ body {
     margin-top: 10rem !important;
 }
 
-.btn-like {
+.btn-like, .btn-share {
     outline: none !important;
     border: none !important;
     background: rgba(0,0,0,0.05) !important;
     color: lightgray !important;
     font-size: 1.25rem !important;
-    border-radius: 50% !important;
+    border-radius: var(--border-radius) !important;
+}
+
+.btn-share:hover, .btn-like:hover {
+    background: rgba(0,0,0,0.05) !important;
 }
 
 .btn-like:hover {
-    background: rgba(0,0,0,0.05) !important;
     color: #fc5353 !important;
+}
+
+.btn-share:hover {
+    color: black !important;
 }
 
 button.btn-like.true {
@@ -263,4 +274,45 @@ button.btn-like.false {
     width: 100%;
     text-align: left !important;
     background: rgba(144, 238, 144, 0.25) !important;
+}
+
+.viewRecipe-duration {
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: center;*/
+    text-align: center;
+    padding: 0.5rem;
+    width: 7.5rem;
+    background: rgba(0,0,0,0.05);
+    border-radius: 1rem;
+    margin: 0.5rem;
+}
+
+.myRecipe-item {
+    margin: auto;
+    height: 12.5rem;
+    width: 100%;
+}
+
+.myRecipe-item img {
+    border-radius: 1rem;
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    /*box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;*/
+}
+
+.dashboard-me-image {
+    margin: auto;
+    height: 10rem;
+    width: 10rem;
+}
+
+.dashboard-me-image img {
+    border-radius: 1rem;
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }

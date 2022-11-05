@@ -31,7 +31,8 @@ const userSchema = new mongoose.Schema(
             ref: 'Recipe'
         },
         picture: {
-            type: [String],
+            type: String,
+            default: 'user.png'
         }
     },
     {

@@ -25,7 +25,12 @@ const getRecipeByUser = asyncHandler(async (req, res) => {
 // @route GET /api/recipe/name
 // @access Public
 const getRecipeByName = asyncHandler( async (req, res) => {
-    const recipe = await Recipe.find({name: {$regex: req.body.name}})
+    const recipe = await Recipe.find({name: {$regex: req.params.name}})
+    res.status(200).json(recipe)
+})
+
+const getRecipe = asyncHandler( async ( req , res ) => {
+    const recipe = await Recipe.find({_id: req.params.id})
     res.status(200).json(recipe)
 })
 
@@ -41,7 +46,7 @@ const createRecipe = asyncHandler(async (req, res) => {
         throw new Error('User not found')
     }
 
-    const {name, image, description, category, keywords, duration, ingredients, instructions, notes } = req.body
+    const {name, image, description, category, keywords, duration, ingredients, instructions, notes, servings } = req.body
     //
     // if(!name || !body || !ingredients || !instructions || !images ){
     //     res.status(400)
@@ -58,6 +63,7 @@ const createRecipe = asyncHandler(async (req, res) => {
         ingredients,
         instructions,
         notes,
+        servings,
         publisher: user
     })
 
@@ -131,6 +137,7 @@ module.exports = {
     getRecipes,
     getRecipeByUser,
     getRecipeByName,
+    getRecipe,
     createRecipe,
     updateRecipe,
     deleteRecipe,

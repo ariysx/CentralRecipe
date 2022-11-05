@@ -58,6 +58,12 @@ function Dashboard(){
                             <h5 className="fw-700">Overview</h5>
                         </div>
                         <div className="col-12 col-sm-3">
+                            <div className="dashboard-me text-center">
+                                <div className="dashboard-me-image mb-3">
+                                    <img src={`http://localhost:8000/api/upload/${user.picture}`} alt=""/>
+                                </div>
+                                <h5>Welcome back, {user.name}</h5>
+                            </div>
                             <h5 className="fw-700 text-center"><FiBarChart2/> My Statistics</h5>
                             <div className="stats-card row align-items-center rounded-3 p-2 mb-3">
                                 <h6>Recipe Owned</h6>
