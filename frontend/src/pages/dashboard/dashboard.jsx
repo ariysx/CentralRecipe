@@ -8,6 +8,7 @@ import LoadingSpinner from "../../components/loading";
 import * as PropTypes from "prop-types";
 import {FiBarChart2, FiBook, FiHeart, FiThumbsUp} from "react-icons/fi";
 import DashboardMenu from "../../components/dashboard/menu";
+import AuthVerify from "../../components/utilities/authVerify";
 
 function Routes(props) {
     return null;
@@ -16,23 +17,7 @@ function Routes(props) {
 Routes.propTypes = {children: PropTypes.node};
 
 function Dashboard(){
-
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-
     const { user, isLoading } = useSelector((state) => state.auth)
-
-    useEffect(() => {
-
-        if (!user) {
-            navigate('/login')
-            toast.error('You\'re not signed in')
-        }
-
-        console.log('Fire')
-
-    }, [navigate])
-
 
     if(isLoading){
         return (
@@ -40,14 +25,9 @@ function Dashboard(){
         )
     }
 
-    if(!user){
-        return (
-            navigate('/login')
-        )
-    }
-
     return(
         <>
+            <AuthVerify user={user}/>
             <section id="dashboard">
                 <Container>
                     <div className="row">

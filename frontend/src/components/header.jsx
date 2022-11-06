@@ -107,7 +107,7 @@ function Header() {
                                 <Dropdown className="d-none d-lg-block">
                                     <Dropdown.Toggle variant="black" className="ps-1" id="dropdown-basic">
                                         <img src={`http://localhost:8000/api/upload/${user.picture}`} alt={user.name}
-                                             width="32" className="rounded-circle me-1"/><FaBars/>
+                                             width="32" height="32" className="rounded-circle me-1"/><FaBars/>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu align="end" className="fs-6">
                                         <Link to="/"><Dropdown.Item href="/"><FiSearch/> Browse</Dropdown.Item></Link>
@@ -134,7 +134,7 @@ function Header() {
                     {user ? (
                         <>
                             <Button onClick={menuToggle} variant="black" className="ps-1 d-block d-lg-none">
-                                <img src={`http://localhost:8000/api/upload/${user.picture}`} alt={user.name} width="32"
+                                <img src={`http://localhost:8000/api/upload/${user.picture}`} alt={user.name} width="32" height="32"
                                      className="rounded-circle me-1"/><FaBars/>
                             </Button>
                         </>

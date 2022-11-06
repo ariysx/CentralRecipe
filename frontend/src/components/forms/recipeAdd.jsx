@@ -97,7 +97,6 @@ export default function FormRecipeAdd() {
                 {({
                       values,
                       errors,
-                      touched,
                       handleChange,
                       handleBlur,
                       handleSubmit,

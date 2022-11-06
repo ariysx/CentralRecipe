@@ -33,6 +33,15 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
     }
 })
 
+export const updateProfile = createAsyncThunk('auth/update', async(data, thunkAPI) => {
+    try{
+        return await authService.updateProfile(data, thunkAPI.getState().auth.user.token);
+    }catch (e){
+        const message = (e.response && e.response.data && e.response.data.message) || e.message || e.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -77,6 +86,21 @@ export const authSlice = createSlice({
                 state.user = action.payload
             })
             .addCase(login.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                // from catch, e returns message error
+                state.message = action.payload
+            })
+            .addCase(updateProfile.pending, (state) =>{
+                state.isLoading = true
+            })
+            .addCase(updateProfile.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.user = action.payload
+                // payload returning from register function in the authService
+            })
+            .addCase(updateProfile.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 // from catch, e returns message error

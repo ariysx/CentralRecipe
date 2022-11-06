@@ -24,7 +24,7 @@ function RecipeItem({recipe}) {
                         <br/>
                             {recipe.keywords.map((item, index) => index < 3 && (
                                 <>
-                                <Badge pill bg="primary" className="me-1">
+                                <Badge pill bg="dark" className="me-1">
                                     {item}
                                 </Badge>
                                 </>

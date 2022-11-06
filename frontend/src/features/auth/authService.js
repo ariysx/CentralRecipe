@@ -32,11 +32,25 @@ const logout = () => {
     localStorage.removeItem('favourites')
 }
 
+const updateProfile = async (data, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    const response = await axios.put(API_URL, data, config)
+    if(response.data){
+        localStorage.setItem('user', JSON.stringify(response.data))
+    }
+    return response.data
+}
+
 // export functions here
 const authService = {
     register,
     login,
     logout,
+    updateProfile,
 }
 
 // export module

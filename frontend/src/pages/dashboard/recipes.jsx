@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {getRecipeByUser, reset} from "../../features/recipe/recipeSlice";
 import React, {useEffect} from "react";
 import DashboardRecipeItem from "../../components/dashboard/recipeItem";
+import LoadingSpinner from "../../components/loading";
 
 export default function Recipes() {
 
@@ -12,7 +13,7 @@ export default function Recipes() {
     const navigate = useNavigate()
 
     const {user} = useSelector((state) => state.auth)
-    const {recipes} = useSelector((state) => state.recipe)
+    const {recipes, isLoading} = useSelector((state) => state.recipe)
 
     useEffect(()=>{
         dispatch(getRecipeByUser(user._id))
@@ -20,6 +21,18 @@ export default function Recipes() {
             dispatch(reset())
         }
     }, [DashboardRecipeItem])
+
+    if(!user){
+        return (
+            navigate('/login')
+        )
+    }
+
+    if(isLoading){
+        return (
+            <LoadingSpinner/>
+        )
+    }
 
     return(
         <>

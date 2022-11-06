@@ -1,26 +1,17 @@
-import {Button, Container, Form} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import FormRecipeAdd from "../../components/forms/recipeAdd";
-import React, {useEffect} from "react";
-import {toast} from "react-toastify";
-import {useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import React from "react";
+import {useSelector} from "react-redux";
 import DashboardMenu from "../../components/dashboard/menu";
+import AuthVerify from "../../components/utilities/authVerify";
 
 export default function NewRecipe(){
 
-    const navigate = useNavigate()
-
     const { user } = useSelector((state) => state.auth)
-
-    useEffect(() => {
-        if(!user) {
-            navigate('/login')
-            toast.error("You're not signed in")
-        }
-    }, [navigate])
 
     return(
         <>
+            <AuthVerify user={user}/>
             <Container>
                 <div className="row">
                     <div className="col-12 col-md-3">

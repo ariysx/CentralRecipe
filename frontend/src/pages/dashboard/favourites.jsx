@@ -2,10 +2,12 @@ import {Container} from "react-bootstrap";
 import DashboardMenu from "../../components/dashboard/menu";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {getRecipes, reset} from "../../features/recipe/recipeSlice";
 import {getFavourites} from "../../features/favourite/favouriteSlice";
 import RecipeItem from "../../components/recipeItem";
+import AuthVerify from "../../components/utilities/authVerify";
+import LoadingSpinner from "../../components/loading";
 
 export default function Favourites(){
 
@@ -13,26 +15,26 @@ export default function Favourites(){
     const navigate = useNavigate()
 
     const {user} = useSelector((state) => state.auth)
-    const {recipes} = useSelector((state) => state.recipe)
+    const {recipes, isLoading} = useSelector((state) => state.recipe)
     const {favourites} = useSelector((state) => state.favourite.favourites)
 
-    //
-    // dispatch(getFavourites())
-    // const [Fav, setFav] = useState()
-    //
     useEffect(()=>{
         dispatch(getFavourites())
         dispatch(getRecipes())
-
-        // setFav(favourites)
-
         return () => {
             dispatch(reset())
         }
     }, [])
 
+    if(isLoading){
+        return (
+            <LoadingSpinner/>
+        )
+    }
+
     return (
         <>
+            <AuthVerify user={user}/>
             <Container>
                 <div className="row">
                     <div className="col-12 col-md-3">

@@ -116,8 +116,20 @@ const updateUser = asyncHandler( async(req, res) => {
         throw new Error('Cannot have favourites')
     }
 
+    if(req.body.password && req.body.password.length !== 0){
+        const salt = await bcrypt.genSalt(10)
+        req.body.password = await bcrypt.hash(req.body.password, salt)
+    }
+
     const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {new: true})
-    res.status(200).json(updatedUser)
+    res.status(200).json({
+        _id: updatedUser.id,
+        username: updatedUser.username,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        picture: updatedUser.picture,
+        token: generateToken(updatedUser.id)
+    })
 })
 
 // @desc Delete user
