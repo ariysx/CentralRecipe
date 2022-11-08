@@ -8,7 +8,7 @@ export default function Footer(){
             <section id="footer mt-5">
                 <Container fluid className="bg-light">
                     <Container>
-                        <div className="footer pt-5 pb-5 text-center">
+                        <div className="footer pt-5 pb-5 text-center mt-5">
                             <img src="https://img.icons8.com/doodle/96/cooking-book.png" width="64" alt=""/>
                             <h5 className="fw-bold">CentralRecipe</h5>
                             <p>Made with <span className="text-danger"><FaHeart/></span> by <a href="https://github.com/ariysx">Rin</a></p>

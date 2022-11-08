@@ -16,6 +16,7 @@ import Profile from "./pages/dashboard/profile"
 import ViewRecipe from "./pages/viewRecipe";
 import ScrollToTop from "./components/utilities/scrollToTop";
 import Footer from "./components/footer";
+import EditRecipe from "./pages/editRecipe";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
                       <Route path='/dashboard/recipes/new' element={<NewRecipe/>}/>
                       <Route path='/dashboard/favourites' element={<Favourites/>}/>
                       <Route path='/dashboard/profile' element={<Profile/>}/>
+                      <Route path='/dashboard/recipes/edit/:id' element={<EditRecipe/>}/>
                       <Route path='/login' element={<Login/>}/>
                       <Route path='/register' element={<Register/>}/>
                       <Route path='/recipe/:id' element={<ViewRecipe />}/>

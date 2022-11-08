@@ -6,6 +6,7 @@ import {getRecipeByUser, reset} from "../../features/recipe/recipeSlice";
 import React, {useEffect} from "react";
 import DashboardRecipeItem from "../../components/dashboard/recipeItem";
 import LoadingSpinner from "../../components/loading";
+import {store} from "../../app/store";
 
 export default function Recipes() {
 
@@ -13,14 +14,14 @@ export default function Recipes() {
     const navigate = useNavigate()
 
     const {user} = useSelector((state) => state.auth)
-    const {recipes, isLoading} = useSelector((state) => state.recipe)
+    const {recipes, isLoading, isSuccess} = useSelector((state) => state.recipe)
 
     useEffect(()=>{
         dispatch(getRecipeByUser(user._id))
         return () => {
             dispatch(reset())
         }
-    }, [DashboardRecipeItem])
+    }, [])
 
     if(!user){
         return (
@@ -36,6 +37,7 @@ export default function Recipes() {
 
     return(
         <>
+            {!recipes ? dispatch(getRecipeByUser(user._id)) : null}
             <Container>
                 <div className="row">
                     <div className="col-12 col-md-3">

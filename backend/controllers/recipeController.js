@@ -42,12 +42,16 @@ const createRecipe = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user.id)
 
     if(!user){
-        res.status(401)
+        res.status(404)
         throw new Error('User not found')
     }
 
     const {name, image, description, category, keywords, duration, ingredients, instructions, notes, servings } = req.body
-    //
+    const check = await Recipe.findOne({name: req.body.name})
+    if(check) {
+        res.status(401)
+        throw new Error('Recipe with this name already exists')
+    }
     // if(!name || !body || !ingredients || !instructions || !images ){
     //     res.status(400)
     //     throw new Error('Please provide all fields')

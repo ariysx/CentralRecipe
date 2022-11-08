@@ -1,8 +1,6 @@
 import React from "react";
 import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
-import {toast} from "react-toastify";
 import {Container} from "react-bootstrap";
 import LoadingSpinner from "../../components/loading";
 import * as PropTypes from "prop-types";
@@ -18,6 +16,13 @@ Routes.propTypes = {children: PropTypes.node};
 
 function Dashboard(){
     const { user, isLoading } = useSelector((state) => state.auth)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        return () => {
+
+        }
+    }, [dispatch])
 
     if(isLoading){
         return (

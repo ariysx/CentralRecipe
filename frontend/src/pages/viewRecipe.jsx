@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate, useParams} from "react-router-dom";
 import {getRecipe} from "../features/recipe/recipeSlice";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import LoadingSpinner from "../components/loading";
 import {Badge, Button, Container, Form, Table} from "react-bootstrap";
 import {FiClock, FiEdit, FiShare} from "react-icons/fi";
@@ -9,8 +9,8 @@ import ButtonFavourite from "../components/button/favourite";
 import GetRecipeDuration from "../components/utilities/getDuration";
 import {toast} from "react-toastify";
 import {getUserById} from "../features/user/userSlice";
-import {reset as resetRecipe} from "../features/recipe/recipeSlice"
-import {reset as resetUsers} from "../features/user/userSlice"
+import Moment from "moment"
+import {FaBars} from "react-icons/fa";
 
 export default function ViewRecipe(){
     // Pass in props for Recipe Obj
@@ -76,7 +76,13 @@ export default function ViewRecipe(){
                             <img src={`http://localhost:8000/api/upload/${recipe.image}`} width="100%" height="100%" style={{objectFit: 'cover'}} className="rounded-3" alt={recipe.name}/>
                         </div>
                         <div className="col-12 col-md-6">
-                            <h2>{recipe.name} <ButtonFavourite recipe={recipe} withCount={false}/> <Button variant="outline-danger" className={`btn-share`} onClick={(e) => onShare(e)}><FiShare /> Share</Button></h2>
+                            <h2 className="m-0 mt-sm-3">{recipe.name} <ButtonFavourite recipe={recipe} withCount={false}/> <Button variant="outline-danger" className={`btn-share`} onClick={(e) => onShare(e)}><FiShare /> Share</Button></h2>
+                            <p className="mt-3"><FiEdit/> Written by
+                                <img src={`http://localhost:8000/api/upload/${publisher && publisher.picture}`} alt={publisher && publisher.name}
+                                     width="32" height="32" className="rounded-circle me-1 ms-1"/> {publisher && publisher.name}</p>
+                            <p>Published {Moment(recipe.createdAt).format("D MMM YYYY")}<span className="text-secondary"> Last update: {Moment(recipe.updatedAt).format("D MMM YYYY")} </span></p>
+
+                            <p>{recipe.description}</p>
                             {recipe.category.map((item) => (
                                 <>
                                     <Badge pill bg="primary" className="me-1 fs-6">
@@ -84,23 +90,21 @@ export default function ViewRecipe(){
                                     </Badge>
                                 </>
                             ))}
-                            <p className="mt-3"><FiEdit/> Written by {publisher && publisher.name}</p>
-                            <p>{recipe.description}</p>
                             <div>
-                                <div className="d-flex justify-content-center justify-content-md-start">
-                                    <div className="viewRecipe-duration">
+                                <div className="row justify-content-center justify-content-md-start mt-3">
+                                    <div className="col viewRecipe-duration">
                                         <img src="https://img.icons8.com/color/100/null/cutting-a-carrot.png" height="70px" alt=""/>
                                         <p className="m-0">{recipe.duration[0].preparation.hour === 0 ? (<></>) : (<>{recipe.duration[0].preparation.hour}</>)} {recipe.duration[0].preparation.minute} Minutes</p>
                                     </div>
-                                    <div className="viewRecipe-duration">
+                                    <div className="col viewRecipe-duration">
                                         <img src="https://img.icons8.com/color/100/null/cooking-pot.png" height="70px" alt=""/>
                                         <p className="m-0">{recipe.duration[0].cooking.hour === 0 ? (<></>) : (<>{recipe.duration[0].cooking.hour}</>)} {recipe.duration[0].cooking.minute} Minutes</p>
                                     </div>
-                                    <div className="viewRecipe-duration">
+                                    <div className="col viewRecipe-duration">
                                         <img src="https://img.icons8.com/color/100/null/soup-plate.png" height="70px" alt=""/>
                                         <p className="m-0">{recipe.duration[0].rest.hour === 0 ? (<></>) : (<>{recipe.duration[0].rest.hour}</>)} {recipe.duration[0].rest.minute} Minutes</p>
                                     </div>
-                                    <div className="viewRecipe-duration">
+                                    <div className="col viewRecipe-duration">
                                         <img src="https://img.icons8.com/color/48/null/tableware.png" height="70px" alt=""/>
                                         <p className="m-0">{recipe.servings > 1 ? recipe.servings + " Servings" : recipe.servings + " Serving"}</p>
                                     </div>

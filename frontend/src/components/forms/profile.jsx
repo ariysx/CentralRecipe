@@ -6,13 +6,13 @@ import {reset, upload} from "../../features/multer/multerSlice";
 import {toast} from "react-toastify";
 import {useDispatch, useSelector} from "react-redux";
 import {updateProfile} from "../../features/auth/authSlice";
+import axios from "axios";
 
 export default function FormProfile() {
 
     const dispatch = useDispatch()
 
     const {user} = useSelector((state) => state.auth)
-    const {data, isSuccess} = useSelector((state) => state.multer)
 
     const [showPassword, setShowPassword] = useState(true)
     const [showPasswordState, setShowPasswordState] = useState(false)
@@ -24,7 +24,7 @@ export default function FormProfile() {
 
     const formikRef = useRef()
 
-    const initialValues = {
+    let initialValues = {
         picture: "http://localhost:8000/api/upload/" + user.picture,
         newPicture: null,
         name: user.name,
@@ -32,6 +32,7 @@ export default function FormProfile() {
         email: user.email,
         newPassword: '',
     }
+
 
     const handleCancel = (formikRef) => {
         formikRef.current.resetForm()
@@ -44,14 +45,11 @@ export default function FormProfile() {
         setShowPasswordState(!showPasswordState)
     }
 
-    const [imgName, setImgName] = useState();
-
     return (
         <>
             <div>
                 {/*<h5>Profile</h5>*/}
                 <Formik
-                    enaleReinitialize={true}
                     innerRef={formikRef}
                     initialValues={{
                         newPicture: null,
@@ -60,7 +58,9 @@ export default function FormProfile() {
                         email: user.email,
                         newPassword: '',
                     }}
-                    onSubmit={async (values) => {
+                    enaleReinitialize={true}
+                    onSubmit={async (values, {resetForm}) => {
+                        handleEdit()
                         const toUpdate = new FormData()
                         const appendChanges = (a, b) => {
                             if (formikRef.current.values[a] !== initialValues[a]) {
@@ -73,15 +73,31 @@ export default function FormProfile() {
                         appendChanges('email', 'email')
                         appendChanges('newPassword', 'password')
 
-                        if (isSuccess) {
-                            toUpdate.set('picture', data.filename)
+                        if(values.newPicture){
+                            const imageData = new FormData()
+                            imageData.append('image', values.newPicture)
+                            const config = {
+                                headers: {
+                                    Authorization: `Bearer ${user.token}`,
+                                },
+                            }
+
+                            await axios.post('/api/upload', imageData, config).then((res) => {
+                                toUpdate.append('picture', res.data.filename)
+                            }).catch((err) => {
+                                console.log(err)
+                                toast.error("Image upload failed, please try again")
+                                return
+                            })
                         }
 
-                        console.log(JSON.parse(JSON.stringify(Object.fromEntries(toUpdate))))
-                        dispatch(updateProfile(JSON.parse(JSON.stringify(Object.fromEntries(toUpdate)))))
-                        toast.success("Successfully updated your profile!")
-                        dispatch(reset())
-                        handleCancel(formikRef)
+                        // console.log(JSON.parse(JSON.stringify(Object.fromEntries(toUpdate))))
+                        dispatch(updateProfile(JSON.parse(JSON.stringify(Object.fromEntries(toUpdate))))).then((res)=> {
+                            // console.log(res)
+                            resetForm({values: {name: res.payload.name, username: res.payload.username, email: res.payload.email}})
+                            toast.success("Successfully updated your profile!")
+                            handleCancel(formikRef)
+                        })
                     }}
                 >{({
                        values,
@@ -117,9 +133,9 @@ export default function FormProfile() {
                                         <input id="newPicture" name="newPicture" type="file" accept='image/*'
                                                onChange={(event) => {
                                                    setFieldValue('newPicture', event.currentTarget.files[0])
-                                                   const imageData = new FormData()
-                                                   imageData.append('image', event.currentTarget.files[0])
-                                                   dispatch(upload(imageData))
+                                                   // const imageData = new FormData()
+                                                   // imageData.append('image', event.currentTarget.files[0])
+                                                   // dispatch(upload(imageData))
                                                    // toast.success("Image uploaded")
                                                }}
                                                className="form-control"/>
@@ -180,7 +196,7 @@ export default function FormProfile() {
                                 </>
                             ) : (
                                 <>
-                                    <Button variant="danger" className="rounded-custom"
+                                    <Button variant="danger" className="rounded-custom me-1"
                                             onClick={() => handleCancel(formikRef)}><FiX/> Cancel</Button>
                                 </>
                             )}

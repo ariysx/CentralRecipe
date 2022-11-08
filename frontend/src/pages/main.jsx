@@ -43,6 +43,8 @@ function Main(){
         )
     }
 
+    const sorted = [].concat(recipes).sort((a,b) => b.createdAt.localeCompare(a.createdAt))
+
     const categories = [
         "Burgers",
         "American",
@@ -135,7 +137,7 @@ function Main(){
                 <h5 className="fw-700">All Recipes</h5>
                 <div className="row">
                     {recipes !== [] ? (
-                        recipes.map((recipe) => (
+                        sorted.map((recipe) => (
                             <>
                                 <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-5" id={recipe._id}>
                                     <RecipeItem key={recipe._id} recipe={recipe}/>

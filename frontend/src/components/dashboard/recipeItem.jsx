@@ -4,10 +4,13 @@ import React, {useState} from "react";
 import {useDispatch} from "react-redux";
 import {deleteRecipe} from "../../features/recipe/recipeSlice";
 import {toast} from "react-toastify";
+import FormRecipeEdit from "../forms/recipeEdit";
+import {useNavigate} from "react-router-dom";
 
 export default function DashboardRecipeItem({recipe}) {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -26,7 +29,8 @@ export default function DashboardRecipeItem({recipe}) {
     }
 
     const onEdit = (e) => {
-
+        console.log("CLicked")
+        navigate('edit/' + recipe._id)
     }
 
     return (

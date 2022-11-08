@@ -1,71 +1,54 @@
-import {Field, FieldArray, Formik} from 'formik'
-import {Button, Form, InputGroup, Spinner} from "react-bootstrap"
-import {FaTrash} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
-import {createRecipe, reset} from "../../features/recipe/recipeSlice";
-import {toast} from "react-toastify";
+import {Field, FieldArray, Formik} from "formik";
 import * as Yup from "yup";
-import {useEffect, useRef, useState} from "react";
+import {Button, Form, InputGroup, Spinner} from "react-bootstrap";
+import {FaTrash} from "react-icons/fa";
 import {FiPlus, FiUpload} from "react-icons/fi";
 import axios from "axios";
+import {toast} from "react-toastify";
+import {updateRecipe, reset} from "../../features/recipe/recipeSlice";
 import {useNavigate} from "react-router-dom";
-import LoadingSpinner from "../loading";
 
-export default function FormRecipeAdd() {
+export default function FormRecipeEdit({recipe}){
 
+    const {user} = useSelector((state) => state.auth)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const {user} = useSelector((state) => state.auth)
-    const {isLoading} = useSelector((state) => state.recipe)
-    const {formikRef} = useRef()
-
-    if (isLoading) {
-        return (
-            <>
-                <LoadingSpinner/>
-            </>
-        )
-    }
 
     return (
+
         <>
             <Formik
-                innerRef={formikRef}
-                initialValues={
-                    {
-                        name: "",
-                        uploadimage: null,
-                        image: null,
-                        description: "",
-                        category: [""],
-                        keywords: [""],
-                        duration: {
-                            preparation: {
-                                hour: 0,
-                                minute: 0,
-                            },
-                            cooking: {
-                                hour: 0,
-                                minute: 0,
-                            },
-                            rest: {
-                                hour: 0,
-                                minute: 0,
-                            },
+                initialValues={{
+                    name: recipe.name,
+                    image: null,
+                    description: recipe.description,
+                    category: recipe.category,
+                    keywords: recipe.keywords,
+                    duration: {
+                        preparation: {
+                            hour: recipe.duration[0]['preparation'].hour,
+                            minute:  recipe.duration[0]['preparation'].minute,
                         },
-                        ingredients: [{
-                            quantity: 0,
-                            unit: '',
-                            ingredient: '',
-                        }],
-                        instructions: [''],
-                        notes: '',
-                        servings: 0,
-                    }
+                        cooking: {
+                            hour: recipe.duration[0]['cooking'].hour,
+                            minute:  recipe.duration[0]['cooking'].minute,
+                        },
+                        rest: {
+                            hour: recipe.duration[0]['rest'].hour,
+                            minute:  recipe.duration[0]['rest'].minute,
+                        },
+                    },
+                    ingredients: recipe.ingredients,
+                    instructions: recipe.instructions,
+                    notes: recipe.notes,
+                    servings: recipe.servings,
+                }
+
                 }
                 // validationSchema={Yup.object({
                 //     name: Yup.string().required(),
-                //     uploadimage: Yup.string().required(),
+                //     image: Yup.string().required(),
                 //     description: Yup.string().required(),
                 //     category: Yup.array(Yup.string().required()).min(1).required(),
                 //     keywords: Yup.array(Yup.string().required()).min(1).required(),
@@ -74,9 +57,11 @@ export default function FormRecipeAdd() {
                 //     instructions: Yup.array().min(1).max(15).required(),
                 // })}
                 onSubmit={async (values) => {
-                    if (values.uploadimage) {
+                    console.log(values)
+                    values._id = recipe._id
+                    if (values.image) {
                         const imageData = new FormData()
-                        imageData.append('image', values['uploadimage'])
+                        imageData.append('image', values['image'])
                         console.log(user.token)
                         const config = {
                             headers: {
@@ -90,25 +75,25 @@ export default function FormRecipeAdd() {
                             toast.error('Image upload failed, please try again')
                             console.log(e)
                         })
-                        let recipeID = ""
-                        dispatch(createRecipe(values)).then((res) => {
-                            const status = res['meta'].requestStatus
-                            console.log(status)
-                            if (status === 'fulfilled') {
-                                toast.success("You have submitted a new recipe!")
-                                recipeID = res.payload._id
-                            }
-                            if (status === 'rejected') {
-                                console.log(res)
-                                toast.error("Error: " + res.payload)
-                            }
-                        }).then(() => {
-                            dispatch(reset())
-                            navigate('/recipe/' + recipeID)
-                        })
                     } else {
-                        toast.error('Please provide an image')
+                        values.image = recipe.image
                     }
+                    let recipeID = ""
+                    dispatch(updateRecipe(values)).then((res) => {
+                        const status = res['meta'].requestStatus
+                        console.log(res.payload)
+                        if (status === 'fulfilled') {
+                            toast.success("You have updated the recipe!")
+                            recipeID = res.payload._id
+                        }
+                        if (status === 'rejected') {
+                            console.log(res)
+                            toast.error("Error: " + res.payload)
+                        }
+                    }).then(() => {
+                        dispatch(reset())
+                        navigate('/recipe/' + recipeID)
+                    })
                 }
                 }>
                 {({
@@ -124,35 +109,32 @@ export default function FormRecipeAdd() {
                         <Form autoComplete="off" onSubmit={handleSubmit} encType="multipart/form-data">
                             <Form.Group className="mb-3">
                                 {/*{errors.name && touched.name ? (<p className={""}>Required Field</p>) : null}*/}
-                                <Form.Label className={errors.name ? "text-danger fw-bold" : ""}>Recipe
-                                    Name</Form.Label>
+                                <Form.Label className={errors.name ? "text-danger fw-bold" : ""}>Recipe Name</Form.Label>
                                 <Form.Control type="text" name="name"
                                               onChange={handleChange}
                                               onBlur={handleBlur}
                                               value={values.name}
                                 />
                             </Form.Group>
-                            {values.uploadimage ? (<img className="m-auto d-block" style={{
-                                width: '33%',
-                                height: '12.5rem',
-                                objectFit: 'cover',
-                                borderRadius: '1rem'
-                            }} src={URL.createObjectURL(values.uploadimage)} alt=""/>) : null}
+
+                            {values.image ? (<img className="m-auto d-block" style={{width: '33%', height: '12.5rem', objectFit: 'cover', borderRadius: '1rem'}} src={URL.createObjectURL(values.image)} alt={recipe.name}/>) :
+                                (
+                                    <>
+                                        <img className="m-auto d-block" style={{width: '33%', height: '12.5rem', objectFit: 'cover', borderRadius: '1rem'}} src={'http://localhost:8000/api/upload/' + recipe.image} alt={recipe.name}/>
+                                    </>
+                                )}
                             <Form.Group className="mb-3">
-                                <Form.Label className={errors.uploadimage ? "text-danger fw-bold" : ""}>Recipe
-                                    Image</Form.Label>
+                                <Form.Label className={errors.image ? "text-danger fw-bold" : ""}>Recipe Image</Form.Label>
                                 <InputGroup>
-                                    <input id="uploadimage" name="uploadimage" type="file" accept='image/*'
-                                           onChange={(event) => {
-                                               setFieldValue('uploadimage', event.currentTarget.files[0])
-                                           }}
+                                    <input id="image" name="image" type="file" accept='image/*' onChange={(event) => {
+                                        setFieldValue('image', event.currentTarget.files[0])
+                                    }}
                                            className="form-control"/>
                                 </InputGroup>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label className={errors.description ? "text-danger fw-bold" : ""}>Recipe
-                                    Description</Form.Label>
+                                <Form.Label className={errors.description ? "text-danger fw-bold" : ""}>Recipe Description</Form.Label>
                                 <Form.Control as="textarea" name="description"
                                               onChange={handleChange}
                                               onBlur={handleBlur}
@@ -162,17 +144,14 @@ export default function FormRecipeAdd() {
 
 
                             <Form.Group className="mb-3">
-                                <Form.Label
-                                    className={errors.servings ? "text-danger fw-bold" : ""}>Servings</Form.Label>
+                                <Form.Label className={errors.servings ? "text-danger fw-bold" : ""}>Servings</Form.Label>
                                 <InputGroup>
-                                    <Field name="servings" className="form-control" type="number" min="0" max="100"
-                                           onWheel={(e) => e.target.blur()}/>
+                                    <Field name="servings" className="form-control" type="number" min="0" max="100" onWheel={(e) => e.target.blur()}/>
                                 </InputGroup>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label
-                                    className={errors.category ? "text-danger fw-bold" : ""}>Category</Form.Label>
+                                <Form.Label className={errors.category ? "text-danger fw-bold" : ""}>Category</Form.Label>
                                 <FieldArray name="category">
                                     {({push, remove}) => (
                                         <>
@@ -181,8 +160,7 @@ export default function FormRecipeAdd() {
                                                     <InputGroup>
                                                         <Field name={`category[${index}]`} as="select"
                                                                className="form-select">
-                                                            <option value="" defaultValue={true} disabled={true}>Select
-                                                                a
+                                                            <option value="" defaultValue={true} disabled={true}>Select a
                                                                 Category
                                                             </option>
                                                             <option value='Burgers'>Burgers</option>
@@ -211,16 +189,14 @@ export default function FormRecipeAdd() {
                                                     </InputGroup>
                                                 </>
                                             ))}
-                                            <Button variant={"success"} onClick={() => push("")}
-                                                    className="mt-3 rounded-custom"><FiPlus/>Add Category</Button>
+                                            <Button variant={"success"} onClick={() => push("")} className="mt-3 rounded-custom"><FiPlus/>Add Category</Button>
                                         </>
                                     )}
                                 </FieldArray>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label
-                                    className={errors.keywords ? "text-danger fw-bold" : ""}>Keywords</Form.Label>
+                                <Form.Label className={errors.keywords ? "text-danger fw-bold" : ""}>Keywords</Form.Label>
                                 <FieldArray name="keywords">
                                     {({push, remove}) => (
                                         <>
@@ -237,8 +213,7 @@ export default function FormRecipeAdd() {
                                                     </InputGroup>
                                                 </>
                                             ))}
-                                            <Button variant={"success"} onClick={() => push('')}
-                                                    className="mt-3 rounded-custom"><FiPlus/>Add Keyword</Button>
+                                            <Button variant={"success"} onClick={() => push('')} className="mt-3 rounded-custom"><FiPlus/>Add Keyword</Button>
                                         </>
                                     )}
                                 </FieldArray>
@@ -251,8 +226,7 @@ export default function FormRecipeAdd() {
                                     <Field name="duration['preparation'].hour" className="form-control col-1"
                                            type="number" min="0" max="23" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Hour</Button>
-                                    <Field name="duration['preparation'].minute" className="form-control" type="number"
-                                           min="0" max="59" onWheel={(e) => e.target.blur()}/>
+                                    <Field name="duration['preparation'].minute" className="form-control" type="number" min="0" max="59" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Minute</Button>
                                 </InputGroup>
                             </Form.Group>
@@ -263,8 +237,7 @@ export default function FormRecipeAdd() {
                                     <Field name="duration['cooking'].hour" className="form-control col-1"
                                            type="number" min="0" max="23" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Hour</Button>
-                                    <Field name="duration['cooking'].minute" className="form-control" type="number"
-                                           min="0" max="59" onWheel={(e) => e.target.blur()}/>
+                                    <Field name="duration['cooking'].minute" className="form-control" type="number" min="0" max="59" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Minute</Button>
                                 </InputGroup>
                             </Form.Group>
@@ -275,15 +248,13 @@ export default function FormRecipeAdd() {
                                     <Field name="duration['rest'].hour" className="form-control col-1"
                                            type="number" min="0" max="23" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Hour</Button>
-                                    <Field name="duration['rest'].minute" className="form-control" type="number" min="0"
-                                           max="59" onWheel={(e) => e.target.blur()}/>
+                                    <Field name="duration['rest'].minute" className="form-control" type="number" min="0" max="59" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Minute</Button>
                                 </InputGroup>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label
-                                    className={errors.ingredients ? "text-danger fw-bold" : ""}>Ingredients</Form.Label>
+                                <Form.Label className={errors.ingredients ? "text-danger fw-bold" : ""}>Ingredients</Form.Label>
                                 {/*<Form.Control type="text" name="ingredients"*/}
                                 {/*              onChange={handleChange}*/}
                                 {/*              onBlur={handleBlur}*/}
@@ -295,8 +266,7 @@ export default function FormRecipeAdd() {
                                                 <>
                                                     <InputGroup>
                                                         <Field name={`ingredients[${index}].quantity`}
-                                                               className="form-control" type="number"
-                                                               onWheel={(e) => e.target.blur()}/>
+                                                               className="form-control" type="number" onWheel={(e) => e.target.blur()}/>
                                                         <Field name={`ingredients[${index}].unit`} as="select"
                                                                className="form-select">
                                                             <option value="default" defaultValue={true}>Select a
@@ -347,8 +317,7 @@ export default function FormRecipeAdd() {
 
 
                             <Form.Group className="mb-3">
-                                <Form.Label
-                                    className={errors.instructions ? "text-danger fw-bold" : ""}>Instructions</Form.Label>
+                                <Form.Label className={errors.instructions ? "text-danger fw-bold" : ""}>Instructions</Form.Label>
                                 <FieldArray name="instructions">
                                     {({push, remove}) => (
                                         <>
@@ -368,8 +337,7 @@ export default function FormRecipeAdd() {
                                                     </InputGroup>
                                                 </>
                                             ))}
-                                            <Button variant={"success"} onClick={() => push('')}
-                                                    className="mt-3 rounded-custom"><FiPlus/>Add Instruction</Button>
+                                            <Button variant={"success"} onClick={() => push('')} className="mt-3 rounded-custom"><FiPlus/>Add Instruction</Button>
                                         </>
                                     )}
                                 </FieldArray>

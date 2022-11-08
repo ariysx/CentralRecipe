@@ -21,6 +21,7 @@ export default function Favourites(){
     useEffect(()=>{
         dispatch(getFavourites())
         dispatch(getRecipes())
+        dispatch(reset())
         return () => {
             dispatch(reset())
         }

@@ -20,7 +20,7 @@ const recipeSchema = mongoose.Schema(
             required: [true, 'Please provide a category']
         },
         keywords: {
-            type: {},
+            type: [],
             required: [true, 'Please provide a keyword']
         },
         // TODO fix this duration thing to match restrictions

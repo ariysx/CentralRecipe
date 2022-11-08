@@ -11,6 +11,17 @@ const createRecipe = async (recipeData, token) => {
     return response.data
 }
 
+const updateRecipe = async (recipeData, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    console.log(API_URL + recipeData._id)
+    const response = await axios.put(API_URL + recipeData._id, recipeData, config)
+    return response.data
+}
+
 const getRecipes = async () => {
     const response = await axios.get(API_URL)
     return response.data
@@ -42,6 +53,7 @@ const recipeService = {
     getRecipe,
     deleteRecipe,
     getRecipeByUser,
+    updateRecipe
 }
 
 export default recipeService
