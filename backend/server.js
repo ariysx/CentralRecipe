@@ -24,6 +24,7 @@ app.use('/api/user', require('./routes/userRoutes'))
 app.use('/api/recipe', require('./routes/recipeRoutes'))
 // Create file sharing service
 app.use('/api/upload', require('./routes/uploadRoutes'))
+app.use('/api/query', require('./routes/queryRoutes'))
 // app.use(express.static('upload'))
 
 // Override express default handler

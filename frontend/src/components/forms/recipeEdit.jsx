@@ -62,7 +62,7 @@ export default function FormRecipeEdit({recipe}){
                     if (values.image) {
                         const imageData = new FormData()
                         imageData.append('image', values['image'])
-                        console.log(user.token)
+                        // console.log(user.token)
                         const config = {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,

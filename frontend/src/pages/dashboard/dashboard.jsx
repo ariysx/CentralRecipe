@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {Container} from "react-bootstrap";
@@ -7,6 +7,9 @@ import * as PropTypes from "prop-types";
 import {FiBarChart2, FiBook, FiHeart, FiThumbsUp} from "react-icons/fi";
 import DashboardMenu from "../../components/dashboard/menu";
 import AuthVerify from "../../components/utilities/authVerify";
+import axios from "axios";
+import {toast} from "react-toastify";
+import {getStatistics} from "../../features/user/userSlice";
 
 function Routes(props) {
     return null;
@@ -18,11 +21,15 @@ function Dashboard(){
     const { user, isLoading } = useSelector((state) => state.auth)
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        return () => {
+    const {statistics} = useSelector((state) => state.users)
+    if(statistics.length === 0 ){
 
-        }
-    }, [dispatch])
+        dispatch(getStatistics(user._id))
+    }
+    // dispatch(getStatistics(user._id))
+    useEffect(() => {
+        dispatch(getStatistics(user._id))
+    }, [])
 
     if(isLoading){
         return (
@@ -32,6 +39,7 @@ function Dashboard(){
 
     return(
         <>
+            {/*{dispatch(getStatistics(user._id))}*/}
             <AuthVerify user={user}/>
             <section id="dashboard">
                 <Container>
@@ -56,7 +64,7 @@ function Dashboard(){
                                     <h2><FiBook/></h2>
                                 </div>
                                 <div className="col">
-                                    <h2>123</h2>
+                                    <h2>{statistics[0] && statistics[0].recipeOwned}</h2>
                                 </div>
                             </div>
                             <div className="stats-card row align-items-center rounded-3 p-2 mb-3">
@@ -65,7 +73,7 @@ function Dashboard(){
                                     <h2><FiThumbsUp/></h2>
                                 </div>
                                 <div className="col">
-                                    <h2>123</h2>
+                                    <h2>{statistics[0] && statistics[0].favouriteReceived}</h2>
                                 </div>
                             </div>
                             <div className="stats-card row align-items-center rounded-3 p-2 mb-3">
@@ -74,7 +82,7 @@ function Dashboard(){
                                     <h2><FiHeart/></h2>
                                 </div>
                                 <div className="col">
-                                    <h2>123</h2>
+                                    <h2>{statistics[0]  && statistics[0].favouriteGiven}</h2>
                                 </div>
                             </div>
                         </div>

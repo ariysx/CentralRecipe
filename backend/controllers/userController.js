@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
+const Recipe = require('../models/recipeModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
@@ -61,6 +62,7 @@ const registerUser = asyncHandler (async (req, res) => {
         res.status(201).json({
             _id: user.id,
             name: user.name,
+            username: user.username,
             email: user.email,
             picture: user.picture,
             token: generateToken(user.id)
@@ -149,6 +151,27 @@ const deleteUser = asyncHandler( async (req, res) => {
     })
 })
 
+const getStatistics = asyncHandler( async (req, res) => {
+    const _id = req.params.id
+    if(!_id) {
+        res.status(400)
+        throw new Error('No ID provided')
+    }
+
+    const user = await User.findOne({_id: _id})
+    const recipes = await Recipe.find({publisher: _id})
+    let favouriteReceived = 0
+    recipes.map((recipe) => {
+        favouriteReceived += recipe.likes
+    })
+
+    res.status(200).json([{
+        recipeOwned: Object.keys(recipes).length,
+        favouriteGiven: Object.keys(user.favourites).length,
+        favouriteReceived: favouriteReceived
+    }])
+})
+
 // Export Modules
 module.exports = {
     getMe,
@@ -157,4 +180,5 @@ module.exports = {
     authenticateUser,
     updateUser,
     deleteUser,
+    getStatistics
 }

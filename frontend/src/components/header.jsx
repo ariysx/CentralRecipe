@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {Link, useLocation, useNavigate} from "react-router-dom"
 
-import {Button, Container, Nav, Navbar, Form, Dropdown} from "react-bootstrap"
+import {Button, Container, Nav, Navbar, Form, Dropdown, ListGroup} from "react-bootstrap"
 import {
     FaBars
 } from "react-icons/fa"
@@ -13,8 +13,8 @@ import {reset as favReset} from "../features/favourite/favouriteSlice"
 import {reset as multerReset} from "../features/multer/multerSlice"
 import {reset as userReset} from "../features/user/userSlice"
 import {reset as recipeReset} from "../features/recipe/recipeSlice"
-
-
+import axios from "axios";
+import qs from "qs"
 
 import {toast} from "react-toastify"
 import {FiBox, FiHeart, FiLogOut, FiSearch, FiUser} from "react-icons/fi"
@@ -58,6 +58,10 @@ function Header() {
         console.log("hidden: " + menu)
     }
 
+    const handleMenuClick = () => {
+        setMenu(false)
+    }
+
     const onLogout = () => {
         toast.warn(`Logged out of ${JSON.parse(localStorage.getItem('user'))['name']}`)
         dispatch(authReset())
@@ -67,6 +71,61 @@ function Header() {
         navigate('/')
         setMenu(true)
         dispatch(logout())
+    }
+
+    const [searchBarState, setSearchBarState] = useState(false)
+    const [search, setSearch] = useState()
+    const [searchBy, setSearchBy] = useState("recipe")
+    const [searchResult, setSearchResult] = useState([])
+
+    useEffect(() => {
+        const delay = setTimeout(async () => {
+            // console.log(search)
+            // Send Axios request here
+            if (search) {
+                const searchData = new FormData()
+                searchData.append(searchBy, search)
+                // console.log(searchData.get(searchBy))
+
+                await axios.post('/api/query/', JSON.parse(JSON.stringify(Object.fromEntries(searchData)))).then((res) => {
+                    setSearchResult(res.data)
+                })
+            }
+        }, 1000 * 0.5)
+
+        return () => clearTimeout(delay)
+    }, [search, searchBy])
+
+    const handleSearchFocus = (e) => {
+        setSearchBarState(true)
+    }
+
+    const handleSearchBlur = (e) => {
+        setSearchBarState(false)
+    }
+
+    const handleSearchChange = async (e) => {
+        setSearch(e.target.value)
+        if (e.target.value) {
+            setSearchBarState(true)
+            return
+        }
+        setSearchResult(null)
+        setSearchBarState(false)
+    }
+
+    const handleSearchNavigate = (e, result) => {
+        console.log(searchBy)
+        if (searchBy === "recipe") {
+            navigate('/recipe/' + result._id)
+        }
+        if (searchBy === "user") {
+            navigate('/user/' + result._id)
+        }
+    }
+
+    const handleSearchSubmit = (e) => {
+        console.log("Submit")
     }
 
     return (
@@ -94,12 +153,61 @@ function Header() {
                             <path
                                 d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"/>
                         </svg>
-                        <Form.Control
-                            aria-label="Default"
-                            aria-describedby="inputGroup-sizing-default"
-                            placeholder="Search recipes, users"
-                            className="ps-4-5 pt-2 pb-2 rounded-custom"
-                        />
+
+                        <form onSubmit={handleSearchSubmit} className="w-100 flex-1">
+                            <input type="text" id={searchBy} name={searchBy} value={search}
+                                   onChange={(e) => handleSearchChange(e)}
+                                   onFocus={(e) => handleSearchFocus(e)}
+                                   onBlur={(e) => handleSearchBlur(e)}
+                                   className="ps-4-5 pt-2 pb-2 rounded-custom form-control w-100"
+                                   placeholder="Search recipes, users"
+                            />
+                        </form>
+                    </div>
+                    <div className="position-absolute left-50 top-80 w-50">
+                        <div
+                            className={`searchExpand position-relative bg-light rounded-3 shadow ${searchBarState ? "d-block" : "d-none"}`}
+                            style={{left: '-50%'}}>
+                            <div className="pt-3 pb-3 pe-3 ps-3">
+                                <div className="d-flex">
+                                    <Button variant={`black ${searchBy === "recipe" ? "active" : "false"} m-1`}
+                                            onMouseDown={(e) => {
+                                                setSearchBy("recipe")
+                                                e.preventDefault()
+                                            }}>Recipe</Button>
+                                    <Button variant={`black ${searchBy === "user" ? "active" : "false"} m-1`}
+                                            onMouseDown={(e) => {
+                                                setSearchBy("user")
+                                                e.preventDefault()
+                                            }}>User</Button>
+                                    <Button variant="black m-1">More</Button>
+                                </div>
+                                <div className="d-flex flex-column">
+                                    {
+                                        (
+                                            searchResult ? (
+                                                searchResult && searchResult.map((result) => {
+                                                    return (
+                                                        <>
+                                                            <Button variant="light" className="text-start"
+                                                                    key={result._id}
+                                                                    onMouseDown={(e) => {
+                                                                        handleSearchNavigate(e, result)
+                                                                    }}>{result.name}</Button>
+                                                        </>
+                                                    )
+                                                })
+                                            ) : (
+                                                <>
+                                                    <Button variant="light" className="text-start">Start
+                                                        typing!</Button>
+                                                </>
+                                            )
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <Nav className="ms-auto flex-1 justify-content-end">
                         {user ? (
@@ -126,15 +234,19 @@ function Header() {
                             </>
                         ) : (
                             <>
-                                <Link to="/login"><Nav.Link href="/login" className="btn d-none d-lg-inline-block">Login</Nav.Link></Link>
-                                <Link to="/register"><Nav.Link href="/register" className="btn btn-black d-none d-lg-inline-block">Sign up</Nav.Link></Link>
+                                <Link to="/login"><Nav.Link href="/login"
+                                                            className="btn d-none d-lg-inline-block">Login</Nav.Link></Link>
+                                <Link to="/register"><Nav.Link href="/register"
+                                                               className="btn btn-black d-none d-lg-inline-block">Sign
+                                    up</Nav.Link></Link>
                             </>
                         )}
                     </Nav>
                     {user ? (
                         <>
                             <Button onClick={menuToggle} variant="black" className="ps-1 d-block d-lg-none">
-                                <img src={`http://localhost:8000/api/upload/${user.picture}`} alt={user.name} width="32" height="32"
+                                <img src={`http://localhost:8000/api/upload/${user.picture}`} alt={user.name} width="32"
+                                     height="32"
                                      className="rounded-circle me-1"/><FaBars/>
                             </Button>
                         </>
@@ -146,22 +258,25 @@ function Header() {
                 </Container>
                 <div className={"d-lg-none w-100 menu " + menu.toString()}>
                     <Container>
-                        <Nav className="ms-auto flex-column d-block">
+                        <Nav className="ms-auto flex-column d-block" onClick={() => handleMenuClick()}>
                             {user ? (
                                 <>
-
-                                    <Link to="/"><Nav.Link href="/" className="d-block text-start"><FiSearch/> Browse</Nav.Link></Link>
-                                    <Link to="/dashboard"><Nav.Link href="/dashboard" className="d-block text-start"><FiBox/> Dashboard</Nav.Link></Link>
-                                    <Link to="/dashboard/favourites"><Nav.Link href="/dashboard/favourites" className="d-block text-start"><FiHeart/> Favourites</Nav.Link></Link>
-                                    <Link to="/dashboard/profile"><Nav.Link href="/dashboard/profile" className="d-block text-start"><FiUser/> Profile</Nav.Link></Link>
-                                    <Nav.Link href="" onClick={onLogout} className="fw-bold fw-700" style={{color: '#e55039'}}><FiLogOut/> Logout</Nav.Link>
-
-
+                                    <Link to="/"><Nav.Link href="/"
+                                                           className="d-block text-start"><FiSearch/> Browse</Nav.Link></Link>
+                                    <Link to="/dashboard"><Nav.Link href="/dashboard"
+                                                                    className="d-block text-start"><FiBox/> Dashboard</Nav.Link></Link>
+                                    <Link to="/dashboard/favourites"><Nav.Link href="/dashboard/favourites"
+                                                                               className="d-block text-start"><FiHeart/> Favourites</Nav.Link></Link>
+                                    <Link to="/dashboard/profile"><Nav.Link href="/dashboard/profile"
+                                                                            className="d-block text-start"><FiUser/> Profile</Nav.Link></Link>
+                                    <Nav.Link href="" onClick={onLogout} className="fw-bold fw-700"
+                                              style={{color: '#e55039'}}><FiLogOut/> Logout</Nav.Link>
                                 </>
                             ) : (
                                 <>
                                     <Nav.Link href="/login" className="btn d-inline-block">Login</Nav.Link><br/>
-                                    <Nav.Link href="/register" className="btn btn-black d-inline-block">Signup</Nav.Link>
+                                    <Nav.Link href="/register"
+                                              className="btn btn-black d-inline-block">Signup</Nav.Link>
                                 </>
                             )}
                         </Nav>

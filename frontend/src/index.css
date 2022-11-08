@@ -12,6 +12,10 @@ a {
     text-decoration: none !important;
 }
 
+.top-80 {
+    top: 80%!important;
+}
+
 .rounded-custom {
     border-radius: var(--border-radius) !important;
 }
@@ -50,7 +54,7 @@ a {
     padding-left: 1rem !important;
 }
 
-.btn-black:hover {
+.btn-black:hover, button.btn.btn-black.active {
     background: transparent !important;
     color: black !important;
     border: 1px solid black !important;

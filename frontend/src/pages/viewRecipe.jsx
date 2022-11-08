@@ -23,11 +23,11 @@ export default function ViewRecipe(){
     const [recipe, setRecipe] = useState()
 
     useEffect(() => {
-        if(!recipe || !recipes){
+        if(!recipe || !recipes || (id !== recipe._id)){
             dispatch(getRecipe(id))
             setRecipe(recipes[0])
         }
-    }, [recipes, recipe])
+    }, [recipes, recipe, id])
 
     const {users} = useSelector((state) => state.users)
     const [publisher, setPublisher] = useState(users[0])
