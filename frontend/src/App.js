@@ -16,7 +16,8 @@ import Profile from "./pages/dashboard/profile"
 import ViewRecipe from "./pages/viewRecipe";
 import ScrollToTop from "./components/utilities/scrollToTop";
 import Footer from "./components/footer";
-import EditRecipe from "./pages/editRecipe";
+import EditRecipe from "./pages/dashboard/editRecipe";
+import Search from "./pages/search";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
                       <Route path='/login' element={<Login/>}/>
                       <Route path='/register' element={<Register/>}/>
                       <Route path='/recipe/:id' element={<ViewRecipe />}/>
+                      <Route path='/search' element={<Search />}/>
                   </Routes>
                   <Footer/>
               </div>

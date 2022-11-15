@@ -94,15 +94,15 @@ export default function ViewRecipe(){
                                 <div className="row justify-content-center justify-content-md-start mt-3">
                                     <div className="col viewRecipe-duration">
                                         <img src="https://img.icons8.com/color/100/null/cutting-a-carrot.png" height="70px" alt=""/>
-                                        <p className="m-0">{recipe.duration[0].preparation.hour === 0 ? (<></>) : (<>{recipe.duration[0].preparation.hour}</>)} {recipe.duration[0].preparation.minute} Minutes</p>
+                                        <p className="m-0">{recipe.duration[0].preparation.hour === 0 ? (<></>) : (<>{recipe.duration[0].preparation.hour} Hour</>)} {recipe.duration[0].preparation.minute} Minutes</p>
                                     </div>
                                     <div className="col viewRecipe-duration">
                                         <img src="https://img.icons8.com/color/100/null/cooking-pot.png" height="70px" alt=""/>
-                                        <p className="m-0">{recipe.duration[0].cooking.hour === 0 ? (<></>) : (<>{recipe.duration[0].cooking.hour}</>)} {recipe.duration[0].cooking.minute} Minutes</p>
+                                        <p className="m-0">{recipe.duration[0].cooking.hour === 0 ? (<></>) : (<>{recipe.duration[0].cooking.hour} Hour</>)} {recipe.duration[0].cooking.minute} Minutes</p>
                                     </div>
                                     <div className="col viewRecipe-duration">
                                         <img src="https://img.icons8.com/color/100/null/soup-plate.png" height="70px" alt=""/>
-                                        <p className="m-0">{recipe.duration[0].rest.hour === 0 ? (<></>) : (<>{recipe.duration[0].rest.hour}</>)} {recipe.duration[0].rest.minute} Minutes</p>
+                                        <p className="m-0">{recipe.duration[0].rest.hour === 0 ? (<></>) : (<>{recipe.duration[0].rest.hour} Hour</>)} {recipe.duration[0].rest.minute} Minutes</p>
                                     </div>
                                     <div className="col viewRecipe-duration">
                                         <img src="https://img.icons8.com/color/48/null/tableware.png" height="70px" alt=""/>

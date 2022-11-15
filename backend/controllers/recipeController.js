@@ -52,10 +52,14 @@ const createRecipe = asyncHandler(async (req, res) => {
         res.status(401)
         throw new Error('Recipe with this name already exists')
     }
-    // if(!name || !body || !ingredients || !instructions || !images ){
-    //     res.status(400)
-    //     throw new Error('Please provide all fields')
-    // }
+
+    const getDuration = () => {
+        let total = (duration[0].cooking.hour * 60) + duration[0].cooking.minute
+        total += (duration[0].preparation.hour * 60) + duration[0].preparation.minute
+        total += (duration[0].rest.hour * 60) + duration[0].rest.minute
+
+        return total
+    }
 
     const recipe = await Recipe.create({
         name,
@@ -68,6 +72,7 @@ const createRecipe = asyncHandler(async (req, res) => {
         instructions,
         notes,
         servings,
+        totalDuration: getDuration(),
         publisher: user
     })
 
@@ -98,7 +103,20 @@ const updateRecipe = asyncHandler(async (req, res) => {
         throw new Error('Unauthorized')
     }
 
-    const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    const getDuration = () => {
+        let total = (req.body.duration.cooking.hour * 60) + req.body.duration.cooking.minute
+        total += (req.body.duration.preparation.hour * 60) + req.body.duration.preparation.minute
+        total += (req.body.duration.rest.hour * 60) + req.body.duration.rest.minute
+
+        return total
+    }
+
+    const newBody = {
+        totalDuration: getDuration(),
+        ...req.body
+    }
+
+    const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, newBody, {new: true})
 
     res.status(200).json(updatedRecipe)
 })

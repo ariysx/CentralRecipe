@@ -1,12 +1,12 @@
-import {Formik, Field, useFormikContext} from "formik"
+import {Formik, Field} from "formik"
 import {Button, Form, InputGroup, Spinner} from "react-bootstrap"
 import {FiEdit, FiEye, FiEyeOff, FiSave, FiX} from "react-icons/fi";
-import React, {useEffect, useRef, useState} from "react";
-import {reset, upload} from "../../features/multer/multerSlice";
+import React, {useRef, useState} from "react";
 import {toast} from "react-toastify";
 import {useDispatch, useSelector} from "react-redux";
 import {updateProfile} from "../../features/auth/authSlice";
 import axios from "axios";
+import confetti from "canvas-confetti";
 
 export default function FormProfile() {
 
@@ -96,6 +96,20 @@ export default function FormProfile() {
                             // console.log(res)
                             resetForm({values: {name: res.payload.name, username: res.payload.username, email: res.payload.email}})
                             toast.success("Successfully updated your profile!")
+
+                            confetti({
+                                particleCount: 30,
+                                angle: 60,
+                                spread: 55,
+                                origin: {x: 0},
+
+                            })
+                            confetti({
+                                particleCount: 30,
+                                angle: 120,
+                                spread: 55,
+                                origin: {x: 1},
+                            })
                             handleCancel(formikRef)
                         })
                     }}

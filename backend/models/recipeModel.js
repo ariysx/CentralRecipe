@@ -28,6 +28,10 @@ const recipeSchema = mongoose.Schema(
             type: [],
             required: [true, 'Please provide a time']
         },
+        totalDuration: {
+            type: Number,
+            default: 0
+        },
         // TODO fix this thing to match restrictions
         ingredients: {
             type: [],

@@ -3,13 +3,13 @@ import {Field, FieldArray, Formik} from "formik";
 import * as Yup from "yup";
 import {Button, Form, InputGroup, Spinner} from "react-bootstrap";
 import {FaTrash} from "react-icons/fa";
-import {FiPlus, FiUpload} from "react-icons/fi";
+import {FiPlus, FiSave, FiUpload} from "react-icons/fi";
 import axios from "axios";
 import {toast} from "react-toastify";
 import {updateRecipe, reset} from "../../features/recipe/recipeSlice";
 import {useNavigate} from "react-router-dom";
 
-export default function FormRecipeEdit({recipe}){
+export default function FormRecipeEdit({recipe}) {
 
     const {user} = useSelector((state) => state.auth)
     const dispatch = useDispatch()
@@ -28,15 +28,15 @@ export default function FormRecipeEdit({recipe}){
                     duration: {
                         preparation: {
                             hour: recipe.duration[0]['preparation'].hour,
-                            minute:  recipe.duration[0]['preparation'].minute,
+                            minute: recipe.duration[0]['preparation'].minute,
                         },
                         cooking: {
                             hour: recipe.duration[0]['cooking'].hour,
-                            minute:  recipe.duration[0]['cooking'].minute,
+                            minute: recipe.duration[0]['cooking'].minute,
                         },
                         rest: {
                             hour: recipe.duration[0]['rest'].hour,
-                            minute:  recipe.duration[0]['rest'].minute,
+                            minute: recipe.duration[0]['rest'].minute,
                         },
                     },
                     ingredients: recipe.ingredients,
@@ -109,7 +109,8 @@ export default function FormRecipeEdit({recipe}){
                         <Form autoComplete="off" onSubmit={handleSubmit} encType="multipart/form-data">
                             <Form.Group className="mb-3">
                                 {/*{errors.name && touched.name ? (<p className={""}>Required Field</p>) : null}*/}
-                                <Form.Label className={errors.name ? "text-danger fw-bold" : ""}>Recipe Name</Form.Label>
+                                <Form.Label className={errors.name ? "text-danger fw-bold" : ""}>Recipe
+                                    Name</Form.Label>
                                 <Form.Control type="text" name="name"
                                               onChange={handleChange}
                                               onBlur={handleBlur}
@@ -117,14 +118,25 @@ export default function FormRecipeEdit({recipe}){
                                 />
                             </Form.Group>
 
-                            {values.image ? (<img className="m-auto d-block" style={{width: '33%', height: '12.5rem', objectFit: 'cover', borderRadius: '1rem'}} src={URL.createObjectURL(values.image)} alt={recipe.name}/>) :
+                            {values.image ? (<img className="m-auto d-block" style={{
+                                    width: '33%',
+                                    height: '12.5rem',
+                                    objectFit: 'cover',
+                                    borderRadius: '1rem'
+                                }} src={URL.createObjectURL(values.image)} alt={recipe.name}/>) :
                                 (
                                     <>
-                                        <img className="m-auto d-block" style={{width: '33%', height: '12.5rem', objectFit: 'cover', borderRadius: '1rem'}} src={'http://localhost:8000/api/upload/' + recipe.image} alt={recipe.name}/>
+                                        <img className="m-auto d-block" style={{
+                                            width: '33%',
+                                            height: '12.5rem',
+                                            objectFit: 'cover',
+                                            borderRadius: '1rem'
+                                        }} src={'http://localhost:8000/api/upload/' + recipe.image} alt={recipe.name}/>
                                     </>
                                 )}
                             <Form.Group className="mb-3">
-                                <Form.Label className={errors.image ? "text-danger fw-bold" : ""}>Recipe Image</Form.Label>
+                                <Form.Label className={errors.image ? "text-danger fw-bold" : ""}>Recipe
+                                    Image</Form.Label>
                                 <InputGroup>
                                     <input id="image" name="image" type="file" accept='image/*' onChange={(event) => {
                                         setFieldValue('image', event.currentTarget.files[0])
@@ -134,7 +146,8 @@ export default function FormRecipeEdit({recipe}){
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label className={errors.description ? "text-danger fw-bold" : ""}>Recipe Description</Form.Label>
+                                <Form.Label className={errors.description ? "text-danger fw-bold" : ""}>Recipe
+                                    Description</Form.Label>
                                 <Form.Control as="textarea" name="description"
                                               onChange={handleChange}
                                               onBlur={handleBlur}
@@ -144,14 +157,17 @@ export default function FormRecipeEdit({recipe}){
 
 
                             <Form.Group className="mb-3">
-                                <Form.Label className={errors.servings ? "text-danger fw-bold" : ""}>Servings</Form.Label>
+                                <Form.Label
+                                    className={errors.servings ? "text-danger fw-bold" : ""}>Servings</Form.Label>
                                 <InputGroup>
-                                    <Field name="servings" className="form-control" type="number" min="0" max="100" onWheel={(e) => e.target.blur()}/>
+                                    <Field name="servings" className="form-control" type="number" min="0" max="100"
+                                           onWheel={(e) => e.target.blur()}/>
                                 </InputGroup>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label className={errors.category ? "text-danger fw-bold" : ""}>Category</Form.Label>
+                                <Form.Label
+                                    className={errors.category ? "text-danger fw-bold" : ""}>Category</Form.Label>
                                 <FieldArray name="category">
                                     {({push, remove}) => (
                                         <>
@@ -160,7 +176,8 @@ export default function FormRecipeEdit({recipe}){
                                                     <InputGroup>
                                                         <Field name={`category[${index}]`} as="select"
                                                                className="form-select">
-                                                            <option value="" defaultValue={true} disabled={true}>Select a
+                                                            <option value="" defaultValue={true} disabled={true}>Select
+                                                                a
                                                                 Category
                                                             </option>
                                                             <option value='Burgers'>Burgers</option>
@@ -189,14 +206,16 @@ export default function FormRecipeEdit({recipe}){
                                                     </InputGroup>
                                                 </>
                                             ))}
-                                            <Button variant={"success"} onClick={() => push("")} className="mt-3 rounded-custom"><FiPlus/>Add Category</Button>
+                                            <Button variant={"success"} onClick={() => push("")}
+                                                    className="mt-3 rounded-custom"><FiPlus/>Add Category</Button>
                                         </>
                                     )}
                                 </FieldArray>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label className={errors.keywords ? "text-danger fw-bold" : ""}>Keywords</Form.Label>
+                                <Form.Label
+                                    className={errors.keywords ? "text-danger fw-bold" : ""}>Keywords</Form.Label>
                                 <FieldArray name="keywords">
                                     {({push, remove}) => (
                                         <>
@@ -213,7 +232,8 @@ export default function FormRecipeEdit({recipe}){
                                                     </InputGroup>
                                                 </>
                                             ))}
-                                            <Button variant={"success"} onClick={() => push('')} className="mt-3 rounded-custom"><FiPlus/>Add Keyword</Button>
+                                            <Button variant={"success"} onClick={() => push('')}
+                                                    className="mt-3 rounded-custom"><FiPlus/>Add Keyword</Button>
                                         </>
                                     )}
                                 </FieldArray>
@@ -226,7 +246,8 @@ export default function FormRecipeEdit({recipe}){
                                     <Field name="duration['preparation'].hour" className="form-control col-1"
                                            type="number" min="0" max="23" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Hour</Button>
-                                    <Field name="duration['preparation'].minute" className="form-control" type="number" min="0" max="59" onWheel={(e) => e.target.blur()}/>
+                                    <Field name="duration['preparation'].minute" className="form-control" type="number"
+                                           min="0" max="59" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Minute</Button>
                                 </InputGroup>
                             </Form.Group>
@@ -237,7 +258,8 @@ export default function FormRecipeEdit({recipe}){
                                     <Field name="duration['cooking'].hour" className="form-control col-1"
                                            type="number" min="0" max="23" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Hour</Button>
-                                    <Field name="duration['cooking'].minute" className="form-control" type="number" min="0" max="59" onWheel={(e) => e.target.blur()}/>
+                                    <Field name="duration['cooking'].minute" className="form-control" type="number"
+                                           min="0" max="59" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Minute</Button>
                                 </InputGroup>
                             </Form.Group>
@@ -248,13 +270,15 @@ export default function FormRecipeEdit({recipe}){
                                     <Field name="duration['rest'].hour" className="form-control col-1"
                                            type="number" min="0" max="23" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Hour</Button>
-                                    <Field name="duration['rest'].minute" className="form-control" type="number" min="0" max="59" onWheel={(e) => e.target.blur()}/>
+                                    <Field name="duration['rest'].minute" className="form-control" type="number" min="0"
+                                           max="59" onWheel={(e) => e.target.blur()}/>
                                     <Button variant="disabled">Minute</Button>
                                 </InputGroup>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label className={errors.ingredients ? "text-danger fw-bold" : ""}>Ingredients</Form.Label>
+                                <Form.Label
+                                    className={errors.ingredients ? "text-danger fw-bold" : ""}>Ingredients</Form.Label>
                                 {/*<Form.Control type="text" name="ingredients"*/}
                                 {/*              onChange={handleChange}*/}
                                 {/*              onBlur={handleBlur}*/}
@@ -266,7 +290,8 @@ export default function FormRecipeEdit({recipe}){
                                                 <>
                                                     <InputGroup>
                                                         <Field name={`ingredients[${index}].quantity`}
-                                                               className="form-control" type="number" onWheel={(e) => e.target.blur()}/>
+                                                               className="form-control" type="number"
+                                                               onWheel={(e) => e.target.blur()}/>
                                                         <Field name={`ingredients[${index}].unit`} as="select"
                                                                className="form-select">
                                                             <option value="default" defaultValue={true}>Select a
@@ -317,7 +342,8 @@ export default function FormRecipeEdit({recipe}){
 
 
                             <Form.Group className="mb-3">
-                                <Form.Label className={errors.instructions ? "text-danger fw-bold" : ""}>Instructions</Form.Label>
+                                <Form.Label
+                                    className={errors.instructions ? "text-danger fw-bold" : ""}>Instructions</Form.Label>
                                 <FieldArray name="instructions">
                                     {({push, remove}) => (
                                         <>
@@ -337,7 +363,8 @@ export default function FormRecipeEdit({recipe}){
                                                     </InputGroup>
                                                 </>
                                             ))}
-                                            <Button variant={"success"} onClick={() => push('')} className="mt-3 rounded-custom"><FiPlus/>Add Instruction</Button>
+                                            <Button variant={"success"} onClick={() => push('')}
+                                                    className="mt-3 rounded-custom"><FiPlus/>Add Instruction</Button>
                                         </>
                                     )}
                                 </FieldArray>
@@ -354,7 +381,7 @@ export default function FormRecipeEdit({recipe}){
                             <Button variant="primary" type="submit" className="rounded-custom" disabled={isSubmitting}>
                                 {isSubmitting ? <Spinner animation={"border"}/> : (
                                     <>
-                                        {<FiUpload/>} Submit
+                                        {<FiSave/>} Save Changes
                                     </>
                                 )}
                             </Button>

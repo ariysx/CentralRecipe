@@ -1,10 +1,10 @@
-import FormRecipeEdit from "../components/forms/recipeEdit";
+import FormRecipeEdit from "../../components/forms/recipeEdit";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import LoadingSpinner from "../components/loading";
-import {getRecipe} from "../features/recipe/recipeSlice";
-import DashboardMenu from "../components/dashboard/menu";
+import LoadingSpinner from "../../components/loading";
+import {getRecipe} from "../../features/recipe/recipeSlice";
+import DashboardMenu from "../../components/dashboard/menu";
 import {Container} from "react-bootstrap";
 
 export default function EditRecipe(){

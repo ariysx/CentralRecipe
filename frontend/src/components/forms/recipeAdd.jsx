@@ -10,6 +10,7 @@ import {FiPlus, FiUpload} from "react-icons/fi";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import LoadingSpinner from "../loading";
+import confetti from "canvas-confetti";
 
 export default function FormRecipeAdd() {
 
@@ -30,6 +31,7 @@ export default function FormRecipeAdd() {
     return (
         <>
             <Formik
+                enableReinitialize={false}
                 innerRef={formikRef}
                 initialValues={
                     {
@@ -73,7 +75,7 @@ export default function FormRecipeAdd() {
                 //     ingredients: Yup.array().min(1).max(26).required(),
                 //     instructions: Yup.array().min(1).max(15).required(),
                 // })}
-                onSubmit={async (values) => {
+                onSubmit={async (values, {setFieldValue}) => {
                     if (values.uploadimage) {
                         const imageData = new FormData()
                         imageData.append('image', values['uploadimage'])
@@ -91,18 +93,45 @@ export default function FormRecipeAdd() {
                             console.log(e)
                         })
                         let recipeID = ""
+                        let error = false
+                        let payload = null;
                         dispatch(createRecipe(values)).then((res) => {
+                            payload = res.payload
                             const status = res['meta'].requestStatus
                             console.log(status)
-                            if (status === 'fulfilled') {
+                            console.log(res)
+                            // return
+                            if(res['payload'].message){
+                                error = true
+                            }
+
+                            if (status === 'fulfilled' && !res['payload'].message) {
                                 toast.success("You have submitted a new recipe!")
                                 recipeID = res.payload._id
+
+                                confetti({
+                                    particleCount: 30,
+                                    angle: 60,
+                                    spread: 55,
+                                    origin: {x: 0},
+
+                                })
+                                confetti({
+                                    particleCount: 30,
+                                    angle: 120,
+                                    spread: 55,
+                                    origin: {x: 1},
+                                })
                             }
                             if (status === 'rejected') {
                                 console.log(res)
                                 toast.error("Error: " + res.payload)
                             }
                         }).then(() => {
+                            if(error){
+                                toast.error('Failed to submit your recipe: ' + payload['message'])
+                               return
+                            }
                             dispatch(reset())
                             navigate('/recipe/' + recipeID)
                         })
@@ -118,7 +147,7 @@ export default function FormRecipeAdd() {
                       handleBlur,
                       handleSubmit,
                       isSubmitting,
-                      setFieldValue
+                      setFieldValue,
                   }) => (
                     <>
                         <Form autoComplete="off" onSubmit={handleSubmit} encType="multipart/form-data">
@@ -384,7 +413,7 @@ export default function FormRecipeAdd() {
                             </Form.Group>
 
                             <Button variant="primary" type="submit" className="rounded-custom" disabled={isSubmitting}>
-                                {isSubmitting ? <Spinner animation={"border"}/> : (
+                                {isSubmitting ? <Spinner animation={"border"} onClick={(e) => e.preventDefault()}/> : (
                                     <>
                                         {<FiUpload/>} Submit
                                     </>
