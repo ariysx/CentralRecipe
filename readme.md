@@ -23,7 +23,7 @@ Central Recipe is a MERN stack application for users to share their favourites r
 ```
 NODE_ENV = development
 PORT = 8000 // Backend Port
-MONGO = MongoURL
+MONGO = MongoURL // Including the collection url
 JWT_SECRET = ABC123
 JWT_EXPIRES = 1d
 ```
