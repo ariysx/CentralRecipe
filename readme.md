@@ -1,3 +1,4 @@
+![](https://i.imgur.com/PjEgW16.png)
 # Central Recipe
 Central Recipe is a MERN stack application for users to share their favourites recipe around
 
