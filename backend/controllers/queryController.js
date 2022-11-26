@@ -47,20 +47,17 @@ const search = asyncHandler(async (req, res) => {
         if(req.body.category) query['category'] = {$in: req.body.category.split(",")}
         if(req.body.servings && parseInt(req.body.servings) !== 0) query['servings'] = parseInt(req.body.servings)
         if(req.body.timeHour && req.body.timeMin && time !== 0) query['totalDuration'] = {$gte: time}
-        if(req.body.keywords) query['keywords'] = req.body.keywords
-
+        if(req.body.keywords) query['keywords'] = {$in: req.body.keywords.split(",")}
 
         const recipes = await Recipe.find(query)
-        // console.log(query)
+        console.log(query)
         console.log(recipes.length)
         res.status(200).json(recipes)
     }
 
     if (req.body.searchBy === "user") {
-
-        res.status(200).json({
-            message: "Hit User"
-        })
+        const users = await User.find({name: {$regex: new RegExp(req.body.name, "i")}})
+        res.status(200).json(users)
     }
 })
 

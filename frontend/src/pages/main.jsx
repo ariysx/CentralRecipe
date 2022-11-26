@@ -121,7 +121,7 @@ function Main(){
                             <>
                                 <SplideSlide>
                                     {/*{console.log("<option value=\'" + item + "\'>" + item + "</option>")}*/}
-                                    <div className="categoryItem text-center" id={`mainSplide${index}`}>
+                                    <div className="categoryItem text-center" id={`mainSplide${index}`} onClick={() => {navigate(`/search/?category=${item}`)}}>
                                         <Button variant="main-category"><img src={categoriesImage[index]} width="48"
                                                                        height="48"/></Button><br/>
                                         {item}

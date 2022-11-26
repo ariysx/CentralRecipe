@@ -126,6 +126,10 @@ function Header() {
         console.log("Submit")
     }
 
+    const handleMoreButton = () => {
+        navigate('/search')
+    }
+
     return (
         <>
             <Navbar bg="light" expand="lg" className="p-4 sticky-top mb-3 mb-sm-5">
@@ -186,7 +190,7 @@ function Header() {
                                                         setSearchBy("user")
                                                         e.preventDefault()
                                                     }}>User</Button>
-                                            <Button variant="black m-1">More</Button>
+                                            <Button variant="black m-1" onMouseDown={() => handleMoreButton()}>More</Button>
                                         </div>
                                         <div className="d-flex flex-column">
                                             {
@@ -226,15 +230,12 @@ function Header() {
                                              width="32" height="32" className="rounded-circle me-1"/><FaBars/>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu align="end" className="fs-6">
-                                        <Link to="/search"><Dropdown.Item href="/"><FiSearch/> Search</Dropdown.Item></Link>
-                                        <Link to="/"><Dropdown.Item href="/"><FiList/> Browse</Dropdown.Item></Link>
+                                        <Link to="/search" className="dropdown-item"><FiSearch/> Search</Link>
+                                        <Link to="/" className="dropdown-item"><FiList/> Browse</Link>
                                         <Dropdown.Divider/>
-                                        <Link to="/dashboard"><Dropdown.Item
-                                            href="/dashboard"><FiBox/> Dashboard</Dropdown.Item></Link>
-                                        <Link to="/dashboard/favourites"><Dropdown.Item
-                                            href="/dashboard/favourites"><FiHeart/> Favourites</Dropdown.Item></Link>
-                                        <Link to="/dashboard/profile"><Dropdown.Item
-                                            href="/dashboard/profile"><FiUser/> Profile</Dropdown.Item></Link>
+                                        <Link to="/dashboard" className="dropdown-item"><FiBox/> Dashboard</Link>
+                                        <Link to="/dashboard/favourites" className="dropdown-item"><FiHeart/> Favourites</Link>
+                                        <Link to="/dashboard/profile" className="dropdown-item"><FiUser/> Profile</Link>
                                         <Dropdown.Divider/>
                                         <Dropdown.Item href="" onClick={onLogout} className="fw-bold fw-700"
                                                        style={{color: '#e55039'}}><FiLogOut/> Logout</Dropdown.Item>
@@ -243,11 +244,8 @@ function Header() {
                             </>
                         ) : (
                             <>
-                                <Link to="/login"><Nav.Link href="/login"
-                                                            className="btn d-none d-lg-inline-block">Login</Nav.Link></Link>
-                                <Link to="/register"><Nav.Link href="/register"
-                                                               className="btn btn-black d-none d-lg-inline-block">Sign
-                                    up</Nav.Link></Link>
+                                <Link to="/login" className="btn d-none d-lg-inline-block nav-link">Login</Link>
+                                <Link to="/register" className="btn d-none d-lg-inline-block nav-link btn-black">Sign up</Link>
                             </>
                         )}
                     </Nav>
@@ -264,14 +262,12 @@ function Header() {
                                         <Nav className="ms-auto flex-column d-block">
                                             {user ? (
                                                 <>
-                                                    <Link to="/"><Nav.Link href="/"
-                                                                           className="d-block text-start"><FiSearch/> Browse</Nav.Link></Link>
-                                                    <Link to="/dashboard"><Nav.Link href="/dashboard"
-                                                                                    className="d-block text-start"><FiBox/> Dashboard</Nav.Link></Link>
-                                                    <Link to="/dashboard/favourites"><Nav.Link href="/dashboard/favourites"
-                                                                                               className="d-block text-start"><FiHeart/> Favourites</Nav.Link></Link>
-                                                    <Link to="/dashboard/profile"><Nav.Link href="/dashboard/profile"
-                                                                                            className="d-block text-start"><FiUser/> Profile</Nav.Link></Link>
+                                                    <Link to="/search" className="nav-link"><FiSearch/> Search</Link>
+                                                    <Link to="/" className="nav-link"><FiList/> Browse</Link>
+                                                    <Dropdown.Divider/>
+                                                    <Link to="/dashboard" className="nav-link"><FiBox/> Dashboard</Link>
+                                                    <Link to="/dashboard/favourites" className="nav-link"><FiHeart/> Favourites</Link>
+                                                    <Link to="/dashboard/profile" className="nav-link"><FiUser/> Profile</Link>
                                                     <Nav.Link href="" onClick={onLogout} className="fw-bold fw-700"
                                                               style={{color: '#e55039'}}><FiLogOut/> Logout</Nav.Link>
                                                 </>

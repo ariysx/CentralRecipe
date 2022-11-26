@@ -33,9 +33,13 @@ export default function DashboardRecipeItem({recipe}) {
         navigate('edit/' + recipe._id)
     }
 
+    const handleClick = () => {
+        navigate('/recipe/' + recipe._id)
+    }
+
     return (
         <>
-            <div className="row bg-light rounded-3 mb-4 align-items-center">
+            <div className="row bg-light rounded-3 mb-4 align-items-center" onClick={() => handleClick()}>
                 <div className="col-4 ps-0">
                     <div className="myRecipe-item">
                         <img src={`http://localhost:8000/api/upload/${recipe.image}`} alt=""/>
@@ -47,9 +51,9 @@ export default function DashboardRecipeItem({recipe}) {
                 </div>
                 <div className="col-2 pt-4 pb-4">
                     <Button variant="warning" className="d-block m-auto fs-4"
-                            onClick={(e) => onEdit(e)}><FiEdit/></Button>
+                            onMouseDown={(e) => onEdit(e)}><FiEdit/></Button>
                     <Button variant="danger" className="d-block m-auto fs-4"
-                            onClick={(e) => onDelete(e)}><FiTrash/></Button>
+                            onMouseDown={(e) => onDelete(e)}><FiTrash/></Button>
                 </div>
             </div>
 

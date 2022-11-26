@@ -10,7 +10,9 @@ import {Link, useNavigate} from "react-router-dom";
 export default function DashboardMenu({active}){
 
     const dispatch = useDispatch()
+
     const navigate = useNavigate()
+
     const onLogout = () => {
         toast.warn(`Logged out of ${JSON.parse(localStorage.getItem('user'))['name']}`)
         dispatch(logout())

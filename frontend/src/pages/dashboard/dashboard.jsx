@@ -7,9 +7,9 @@ import * as PropTypes from "prop-types";
 import {FiBarChart2, FiBook, FiHeart, FiThumbsUp} from "react-icons/fi";
 import DashboardMenu from "../../components/dashboard/menu";
 import AuthVerify from "../../components/utilities/authVerify";
-import axios from "axios";
-import {toast} from "react-toastify";
 import {getStatistics} from "../../features/user/userSlice";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 function Routes(props) {
     return null;
@@ -22,14 +22,16 @@ function Dashboard(){
     const dispatch = useDispatch()
 
     const {statistics} = useSelector((state) => state.users)
-    if(statistics.length === 0 ){
 
+    if(!user){
+        return (
+            <AuthVerify user={user}/>
+        )
+    }
+
+    if(statistics.length === 0 ){
         dispatch(getStatistics(user._id))
     }
-    // dispatch(getStatistics(user._id))
-    useEffect(() => {
-        dispatch(getStatistics(user._id))
-    }, [])
 
     if(isLoading){
         return (
@@ -40,7 +42,6 @@ function Dashboard(){
     return(
         <>
             {/*{dispatch(getStatistics(user._id))}*/}
-            <AuthVerify user={user}/>
             <section id="dashboard">
                 <Container>
                     <div className="row">

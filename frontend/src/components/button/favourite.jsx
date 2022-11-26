@@ -40,6 +40,7 @@ export default function ButtonFavourite({recipe, withCount}){
         if(!user){ // Not signed in
             toast.warning('You must be signed in to do this!')
             navigate('/login')
+            e.stopPropagation()
             return
         }
 

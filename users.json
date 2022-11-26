@@ -1,0 +1,216 @@
+[{
+  "_id": {
+    "$oid": "6355ad506e2a682e262362f0"
+  },
+  "username": "me",
+  "password": "$2a$10$jwaPJlANCrDb/q2ayZsCnOacYWsAnjECBvfbQr1HzR2MvzW615uGa",
+  "email": "me@gmail.com",
+  "name": "ItsMe",
+  "favourites": [
+    "634ecc00335ccff7ba9ad2f7",
+    "637e7c2b242ecfbd08f5bd9b"
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1666559312396"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1669236819593"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6356f96d2c08b366987ea3db"
+  },
+  "username": "ariy",
+  "password": "$2a$10$C1.Cpy6j2L0A8x/2RtSYTupAxa8SWfZ9UGELtgTIrznCJFdUh52Xq",
+  "email": "ariy@ariy.com",
+  "name": "Ariana",
+  "favourites": [
+    "63556f780128af9d2d46b5d0",
+    "63556f9a0128af9d2d46b5d6",
+    "6359c8c8909fa9623ff1cf1a",
+    "6359c8c8909fa9623ff1cf2a",
+    "6361df39b7e4f4540ed0e8ab",
+    "6361df3bb7e4f4540ed0e8b0",
+    "6364b12416918e216defe780",
+    "6364c7e1e2235d960147644e",
+    "6364c7dbe2235d960147644d",
+    "6367807e839b085772e79d0a"
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1666644333640"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1667873645791"
+    }
+  },
+  "__v": 0,
+  "picture": "1667873645754.jpeg"
+},{
+  "_id": {
+    "$oid": "6365beb88693f5512c7a4eb9"
+  },
+  "username": "grande",
+  "password": "$2a$10$CRdAWMxvcvlA3xHDD9g.AuZg/B4yl9GChjkFmj5SyAZ0sjh3j4GjO",
+  "email": "hello@hello.com",
+  "name": "ariana",
+  "favourites": [],
+  "picture": "user.png",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1667612344724"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1667612344724"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6366379d90f4ea6c9bfd9360"
+  },
+  "username": "hoe",
+  "password": "$2a$10$fwo1ioGton/YBnLo33bUF.g67eGeKHrwOsM04JrjODH.5WAEIfttG",
+  "email": "aowj@hoe.com",
+  "name": "laurence",
+  "favourites": [
+    "6364b12416918e216defe780"
+  ],
+  "picture": "user.png",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1667643293142"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1667667123234"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "63668e504f651228f43559ef"
+  },
+  "username": "gaga",
+  "password": "$2a$10$RwzRdFVHph4LX7dnciA.NOa5n0KTBi5PUQx/ahsL2GL/Jp9TVUBOm",
+  "email": "gaga@gaga.ie",
+  "name": "ariy",
+  "favourites": [],
+  "picture": "user.png",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1667665488246"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1667666158411"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6369bcc57deccd8d97910096"
+  },
+  "username": "ry",
+  "password": "$2a$10$0VpXUO2Me4j2zVbOnvDEIuPMAgRx1oI3cc03mjFdsOvVD8XVPx2qO",
+  "email": "ry@ry.com",
+  "name": "Ariy",
+  "favourites": [
+    "636996aabd4fc9190b06a7ff",
+    "636ac12fc6374710f1bd607d",
+    "6364c7dbe2235d960147644d"
+  ],
+  "picture": "1667993461077.jpeg",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1667873989690"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1667993461276"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6369bcea7deccd8d979100a2"
+  },
+  "username": "test",
+  "password": "$2a$10$QR0UbjgCSr5nGOR0zEW7yOeZAUwBYDqhX0yed33fzEOofyJfn72cO",
+  "email": "test@test.ie",
+  "name": "test",
+  "favourites": [],
+  "picture": "user.png",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1667874026954"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1667874026954"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "636e573d48b7ed4affd015da"
+  },
+  "username": "admin",
+  "password": "$2a$10$VEHfGnHofgKDdFSLftJ3cu0DyFkUUfpC..cqfS8y7IiJji43Z/FR6",
+  "email": "admin@admin.ie",
+  "name": "ariyo",
+  "favourites": [
+    "6364c7dbe2235d960147644d",
+    "636996aabd4fc9190b06a7ff",
+    "637e7c2b242ecfbd08f5bd9b",
+    "636ac12fc6374710f1bd607d",
+    "637270e48accad62e6e27c96",
+    "6364c7e1e2235d960147644e"
+  ],
+  "picture": "1669490083473.PNG",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1668175677795"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1669490083514"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "637f35bd1c071acee1e7d4cb"
+  },
+  "username": "hello",
+  "password": "$2a$10$IJXuT3X/.HkEzqHTxE77VecWEtjVYBqhY3qETBOE8F80uMYKrGVaq",
+  "email": "Hello@Hello.ie",
+  "name": "hello",
+  "favourites": [],
+  "picture": "user.png",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1669281213829"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1669281213829"
+    }
+  },
+  "__v": 0
+}]

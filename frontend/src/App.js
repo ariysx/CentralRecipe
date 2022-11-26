@@ -18,6 +18,7 @@ import ScrollToTop from "./components/utilities/scrollToTop";
 import Footer from "./components/footer";
 import EditRecipe from "./pages/dashboard/editRecipe";
 import Search from "./pages/search";
+import ViewUser from "./pages/viewUser";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                       <Route path='/register' element={<Register/>}/>
                       <Route path='/recipe/:id' element={<ViewRecipe />}/>
                       <Route path='/search' element={<Search />}/>
+                      <Route path='/user/:id' element={<ViewUser />}/>
                   </Routes>
                   <Footer/>
               </div>

@@ -320,3 +320,19 @@ button.btn-like.false {
     width: 100%;
     object-fit: cover;
 }
+
+.userItem {
+    height: 15rem;
+}
+
+.userItem img {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.userCard {
+    background: none !important;
+    border: none !important;
+}

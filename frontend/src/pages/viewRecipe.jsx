@@ -4,7 +4,7 @@ import {getRecipe} from "../features/recipe/recipeSlice";
 import React, {useEffect, useState} from "react";
 import LoadingSpinner from "../components/loading";
 import {Badge, Button, Container, Form, Table} from "react-bootstrap";
-import {FiClock, FiEdit, FiShare} from "react-icons/fi";
+import {FiClock, FiEdit, FiShare, FiTrash} from "react-icons/fi";
 import ButtonFavourite from "../components/button/favourite";
 import GetRecipeDuration from "../components/utilities/getDuration";
 import {toast} from "react-toastify";
@@ -18,6 +18,7 @@ export default function ViewRecipe(){
 
     const dispatch = useDispatch()
     const {id} = useParams()
+    const navigate = useNavigate()
 
     const {recipes, isLoading} = useSelector((state) => state.recipe)
     const [recipe, setRecipe] = useState()
@@ -30,6 +31,7 @@ export default function ViewRecipe(){
     }, [recipes, recipe, id])
 
     const {users} = useSelector((state) => state.users)
+    const {user} = useSelector((state) => state.auth)
     const [publisher, setPublisher] = useState(users[0])
 
     useEffect(() => {
@@ -67,25 +69,50 @@ export default function ViewRecipe(){
         toast.success("Link to the recipe has been copied to your clipboard")
     }
 
+    const goToUser = () => {
+        navigate(`/user/${publisher && publisher._id}`)
+    }
+
+    const handleEdit = () => {
+        navigate('/dashboard/recipes/edit/' + (recipe && recipe._id))
+    }
+
+    const handleCategoryClick = (e, i) => {
+        navigate('/search?category=' + i)
+    }
+
+    const handleKeywordsClick = (e, i) => {
+        navigate('/search?keywords=' + i)
+    }
+
     return (
         <>
-            <section id={id}>
+            <section id={recipe && recipe._id}>
                 <Container>
                     <div className="row align-items-center">
                         <div className="col-12 col-md-6" style={{height: '25rem'}}>
                             <img src={`http://localhost:8000/api/upload/${recipe.image}`} width="100%" height="100%" style={{objectFit: 'cover'}} className="rounded-3" alt={recipe.name}/>
                         </div>
                         <div className="col-12 col-md-6">
-                            <h2 className="m-0 mt-sm-3">{recipe.name} <ButtonFavourite recipe={recipe} withCount={false}/> <Button variant="outline-danger" className={`btn-share`} onClick={(e) => onShare(e)}><FiShare /> Share</Button></h2>
-                            <p className="mt-3"><FiEdit/> Written by
+                            <h2 className="m-0 mt-sm-3">{recipe.name} <ButtonFavourite recipe={recipe} withCount={false}/> <Button variant="outline-danger" className={`btn-share me-1`} onClick={(e) => onShare(e)}><FiShare /> Share</Button>
+                                {(publisher && user) && publisher._id === user._id ? (
+                                    <>
+                                        <Button variant="warning" className="me-1 rounded-custom" onClick={() => handleEdit()}><FiEdit/></Button>
+                                    </>
+                                ) : (
+                                    <>
+                                    </>
+                                    )}
+                            </h2>
+                            <p className="mt-3"><FiEdit/> Written by<span onClick={() => goToUser()} style={{cursor: "pointer"}}>
                                 <img src={`http://localhost:8000/api/upload/${publisher && publisher.picture}`} alt={publisher && publisher.name}
-                                     width="32" height="32" className="rounded-circle me-1 ms-1"/> {publisher && publisher.name}</p>
+                                     width="32" height="32" className="rounded-circle me-1 ms-1"/>{publisher && publisher.name}</span></p>
                             <p>Published {Moment(recipe.createdAt).format("D MMM YYYY")}<span className="text-secondary"> Last update: {Moment(recipe.updatedAt).format("D MMM YYYY")} </span></p>
 
                             <p>{recipe.description}</p>
                             {recipe.category.map((item) => (
                                 <>
-                                    <Badge pill bg="primary" className="me-1 fs-6">
+                                    <Badge pill bg="primary" className="me-1 fs-6 cursor-pointer" onClick={(e) => {handleCategoryClick(e, item)}}>
                                         {item}
                                     </Badge>
                                 </>
@@ -116,7 +143,7 @@ export default function ViewRecipe(){
                             <div className="badges mt-3">
                                 {recipe.keywords.map((item) => (
                                     <>
-                                        <Badge pill bg="dark" className="me-1 fs-6">
+                                        <Badge pill bg="dark" className="me-1 fs-6 cursor-pointer" onClick={(e) => {handleKeywordsClick(e, item)}}>
                                             {item}
                                         </Badge>
                                     </>

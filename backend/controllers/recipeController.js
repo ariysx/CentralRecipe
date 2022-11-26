@@ -54,9 +54,9 @@ const createRecipe = asyncHandler(async (req, res) => {
     }
 
     const getDuration = () => {
-        let total = (duration[0].cooking.hour * 60) + duration[0].cooking.minute
-        total += (duration[0].preparation.hour * 60) + duration[0].preparation.minute
-        total += (duration[0].rest.hour * 60) + duration[0].rest.minute
+        let total = (duration.cooking.hour * 60) + duration.cooking.minute
+        total += (duration.preparation.hour * 60) + duration.preparation.minute
+        total += (duration.rest.hour * 60) + duration.rest.minute
 
         return total
     }

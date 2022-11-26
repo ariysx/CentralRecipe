@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {updateProfile} from "../../features/auth/authSlice";
 import axios from "axios";
 import confetti from "canvas-confetti";
+import AuthVerify from "../utilities/authVerify";
 
 export default function FormProfile() {
 
@@ -17,6 +18,7 @@ export default function FormProfile() {
     const [showPassword, setShowPassword] = useState(true)
     const [showPasswordState, setShowPasswordState] = useState(false)
     const [edit, setEdit] = useState(true)
+
 
     const handleEdit = () => {
         setEdit(false)

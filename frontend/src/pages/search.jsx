@@ -5,8 +5,9 @@ import {Formik, Form, Field, useFormikContext, FieldArray} from 'formik'
 import axios from "axios";
 import RecipeItem from "../components/recipeItem";
 import {FaTrash} from "react-icons/fa";
-import LoadingSpinner from "../components/loading";
 import Slider from 'react-input-slider'
+import UserItem from "../components/search/userItem";
+import {useLocation, useSearchParams} from "react-router-dom";
 
 export default function Search() {
 
@@ -19,8 +20,12 @@ export default function Search() {
         servings: true,
     })
 
-    const [searchResult, setSearchResult] = useState()
+    const location = useLocation()
+
+    const [searchResult, setSearchResult] = useState([])
+    const [userSearchResult, setUserSearchResult] = useState([])
     const [formValues, setFormValues] = useState([])
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const categories = [
         "Burgers",
@@ -48,6 +53,9 @@ export default function Search() {
         const {values} = useFormikContext();
 
         useEffect(() => {
+            // if(location.state && location.state.category){
+            //     values.category.push(location.state.category && location.state.category)
+            // }
             setFormValues(values)
             // console.log(formValues)
         }, [values])
@@ -82,57 +90,93 @@ export default function Search() {
     const [sortBy, setSortBy] = useState()
 
     useEffect(() => {
-        switch (sortBy) {
-            case "newest": {
-                const sorted = [].concat(searchResult).sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-                setSearchResult(sorted)
-                break;
+        if (formValues.searchBy === "recipe") {
+            switch (sortBy) {
+                case "newest": {
+                    const sorted = [].concat(searchResult).sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+                    setSearchResult(sorted)
+                    break;
+                }
+                case "oldest": {
+                    const sorted = [].concat(searchResult).sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+                    setSearchResult(sorted)
+                    break;
+                }
+                case "recentlyUpdated": {
+                    const sorted = [].concat(searchResult).sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))
+                    setSearchResult(sorted)
+                    break;
+                }
+                case "mostFav": {
+                    const sorted = [].concat(searchResult).sort((a, b) => b.likes - a.likes)
+                    setSearchResult(sorted)
+                    break;
+                }
+                case "leastFav": {
+                    const sorted = [].concat(searchResult).sort((a, b) => a.likes - b.likes)
+                    setSearchResult(sorted)
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
-            case "oldest": {
-                const sorted = [].concat(searchResult).sort((a, b) => a.createdAt.localeCompare(b.createdAt))
-                setSearchResult(sorted)
-                break;
-            }
-            case "recentlyUpdated": {
-                const sorted = [].concat(searchResult).sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))
-                setSearchResult(sorted)
-                break;
-            }
-            case "mostFav": {
-                const sorted = [].concat(searchResult).sort((a, b) => b.likes - a.likes)
-                setSearchResult(sorted)
-                break;
-            }
-            case "leastFav": {
-                const sorted = [].concat(searchResult).sort((a, b) => a.likes - b.likes)
-                setSearchResult(sorted)
-                break;
-            }
-            default: {
-                break;
+        }
+        if (formValues.searchBy === "user") {
+            switch (sortBy) {
+                case "newest": {
+                    const sorted = [].concat(userSearchResult).sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+                    setUserSearchResult(sorted)
+                    break;
+                }
+                case "oldest": {
+                    const sorted = [].concat(userSearchResult).sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+                    setUserSearchResult(sorted)
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
         }
     }, [sortBy])
 
     useEffect(() => {
         const delay = setTimeout(async () => {
-            const searchData = new FormData()
-            searchData.append("name", formValues.search)
-            searchData.append("searchBy", formValues.searchBy)
-            searchData.append("category", formValues.category)
-            searchData.append("servings", formValues.servings)
-            searchData.append("keywords", formValues.keywords)
-            searchData.append("timeMin", formValues.timeMin)
-            searchData.append("timeHour", formValues.timeHour)
+            if (formValues.searchBy === "recipe") {
+                const searchData = new FormData()
+                searchData.append("name", formValues.search)
+                searchData.append("searchBy", formValues.searchBy)
+                searchData.append("category", formValues.category)
+                searchData.append("servings", formValues.servings)
+                searchData.append("keywords", formValues.keywords)
+                searchData.append("timeMin", formValues.timeMin)
+                searchData.append("timeHour", formValues.timeHour)
 
-            // console.log(JSON.parse(JSON.stringify(Object.fromEntries(searchData))))
+                // console.log(JSON.parse(JSON.stringify(Object.fromEntries(searchData))))
 
-            await axios.post('/api/query/search/', JSON.parse(JSON.stringify(Object.fromEntries(searchData)))).then((res) => {
-                setSearchResult(res.data)
-                console.log(res.data)
-            }).catch((e) => {
-                console.log(e)
-            })
+                await axios.post('/api/query/search/', JSON.parse(JSON.stringify(Object.fromEntries(searchData)))).then((res) => {
+                    setSearchResult(res.data)
+                    console.log(res.data)
+                }).catch((e) => {
+                    console.log(e)
+                })
+            }
+
+            if (formValues.searchBy === "user") {
+                const searchData = new FormData()
+                searchData.append("name", formValues.search)
+                searchData.append("searchBy", formValues.searchBy)
+
+                // console.log(JSON.parse(JSON.stringify(Object.fromEntries(searchData))))
+
+                await axios.post('/api/query/search/', JSON.parse(JSON.stringify(Object.fromEntries(searchData)))).then((res) => {
+                    setUserSearchResult(res.data)
+                    console.log(res.data)
+                }).catch((e) => {
+                    console.log(e)
+                })
+            }
         }, 1000 * 0.5)
         console.log(formValues)
         return () => clearTimeout(delay)
@@ -171,13 +215,14 @@ export default function Search() {
                             <Formik
                                 innerRef={formikRef}
                                 initialValues={{
-                                    search: "",
+                                    search: `${searchParams.get('q') ? searchParams.get('q') : ""}`,
                                     searchBy: "recipe",
-                                    category: [],
-                                    servings: 0,
-                                    timeHour: 0,
-                                    timeMin: 0,
-                                    keywords: [""],
+                                    // category: [`${location.state && location.state.category ? location.state.category : '' }`],
+                                    category: [`${searchParams.get('category') ? searchParams.get('category') : '' }`],
+                                    servings: `${searchParams.get('servings') ? searchParams.get('servings') : 0}`,
+                                    timeHour: `${searchParams.get('timeHour') ? searchParams.get('timeHour') : 0}`,
+                                    timeMin: `${searchParams.get('timeMin') ? searchParams.get('timeMin') : 0}`,
+                                    keywords: [`${searchParams.get('keywords') ? searchParams.get('keywords') : '' }`],
                                 }}
                                 onSubmit={async (values) => {
                                     alert(JSON.stringify(values, null, 2));
@@ -210,125 +255,141 @@ export default function Search() {
                                             </Collapse>
                                         </div>
 
-                                        <div className="filter-category">
-                                            <Button variant="light d-block w-100 text-start" onClick={() => setOpen({
-                                                ...open,
-                                                category: !open.category
-                                            })}>{open.category ? (<FiChevronDown/>) : (
-                                                <FiChevronUp/>)} Category</Button>
-                                            <Collapse in={open.category}>
-                                                <div className="options mb-3">
-                                                    {categories.map(item => (
-                                                        <>
-                                                            <div className="form-check">
-                                                                <Field type="checkbox" name="category"
-                                                                       value={item}
-                                                                       className="form-check-input"/>
-                                                                <label className="form-check-label">{item}</label>
+                                        {formValues.searchBy === "recipe" ? (
+                                            <>
+                                                <div className="filter-category">
+                                                    <Button variant="light d-block w-100 text-start"
+                                                            onClick={() => setOpen({
+                                                                ...open,
+                                                                category: !open.category
+                                                            })}>{open.category ? (<FiChevronDown/>) : (
+                                                        <FiChevronUp/>)} Category</Button>
+                                                    <Collapse in={open.category}>
+                                                        <div className="options mb-3">
+                                                            {categories.map(item => (
+                                                                <>
+                                                                    <div className="form-check">
+                                                                        <Field type="checkbox" name="category"
+                                                                               value={item}
+                                                                               className="form-check-input"/>
+                                                                        <label
+                                                                            className="form-check-label">{item}</label>
+                                                                    </div>
+                                                                </>
+                                                            ))}
+                                                        </div>
+                                                    </Collapse>
+                                                </div>
+
+                                                <div className="filter-servings">
+                                                    <Button variant="light d-block w-100 text-start"
+                                                            onClick={() => setOpen({
+                                                                ...open,
+                                                                servings: !open.servings
+                                                            })}>{open.servings ? (<FiChevronDown/>) : (
+                                                        <FiChevronUp/>)} Servings</Button>
+                                                    <Collapse in={open.servings}>
+                                                        <div className="options mb-3">
+                                                            <Field type="number" min={0} max={100} name="servings"
+                                                                   className="form-control"/>
+                                                        </div>
+                                                    </Collapse>
+                                                </div>
+
+                                                <div className="filter-time">
+                                                    <Button variant="light d-block w-100 text-start"
+                                                            onClick={() => setOpen({
+                                                                ...open,
+                                                                time: !open.time
+                                                            })}>{open.time ? (
+                                                        <FiChevronDown/>) : (<FiChevronUp/>)} Time</Button>
+
+                                                    <Collapse in={open.time}>
+                                                        <div className="options mb-3">
+                                                            <div>
+                                                                <InputGroup>
+                                                                    <Field type="number" min={0} max={23}
+                                                                           className="form-control"
+                                                                           value={values.timeHour}
+                                                                           onChange={(e) => setFieldValue("timeHour", e.target.value)}/>
+                                                                    <Button variant="light flex-1">Hour</Button>
+                                                                </InputGroup>
+                                                                <Slider
+                                                                    className="w-100"
+                                                                    axis="x"
+                                                                    xstep={1}
+                                                                    xmin={0}
+                                                                    xmax={24}
+                                                                    x={values.timeHour}
+                                                                    onChange={({x}) => setFieldValue("timeHour", x)}
+                                                                />
                                                             </div>
-                                                        </>
-                                                    ))}
+
+                                                            <div>
+                                                                <InputGroup>
+                                                                    <Field type="number" min={0} max={60}
+                                                                           className="form-control"
+                                                                           value={values.timeMin}
+                                                                           onChange={(e) => setFieldValue("timeMin", e.target.value)}/>
+                                                                    <Button variant="light flex-1">Min</Button>
+                                                                </InputGroup>
+                                                                <Slider
+                                                                    className="w-100"
+                                                                    axis="x"
+                                                                    xstep={1}
+                                                                    xmin={0}
+                                                                    xmax={60}
+                                                                    x={values.timeMin}
+                                                                    onChange={({x}) => setFieldValue("timeMin", x)}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </Collapse>
                                                 </div>
-                                            </Collapse>
-                                        </div>
 
-                                        <div className="filter-servings">
-                                            <Button variant="light d-block w-100 text-start" onClick={() => setOpen({
-                                                ...open,
-                                                servings: !open.servings
-                                            })}>{open.servings ? (<FiChevronDown/>) : (
-                                                <FiChevronUp/>)} Servings</Button>
-                                            <Collapse in={open.servings}>
-                                                <div className="options mb-3">
-                                                    <Field type="number" min={0} max={100} name="servings"
-                                                           className="form-control"/>
-                                                </div>
-                                            </Collapse>
-                                        </div>
+                                                <div className="filter-keywords">
+                                                    <Button variant="light d-block w-100 text-start"
+                                                            onClick={() => setOpen({
+                                                                ...open,
+                                                                keywords: !open.keywords
+                                                            })}>{open.keywords ? (
+                                                        <FiChevronDown/>) : (<FiChevronUp/>)} Keywords</Button>
 
-                                        <div className="filter-time">
-                                            <Button variant="light d-block w-100 text-start"
-                                                    onClick={() => setOpen({...open, time: !open.time})}>{open.time ? (
-                                                <FiChevronDown/>) : (<FiChevronUp/>)} Time</Button>
-
-                                            <Collapse in={open.time}>
-                                                <div className="options mb-3">
-                                                    <div>
-                                                        <InputGroup>
-                                                            <Field type="number" min={0} max={23}
-                                                                   className="form-control" value={values.timeHour}
-                                                                   onChange={(e) => setFieldValue("timeHour", e.target.value)}/>
-                                                            <Button variant="light flex-1">Hour</Button>
-                                                        </InputGroup>
-                                                        <Slider
-                                                            className="w-100"
-                                                            axis="x"
-                                                            xstep={1}
-                                                            xmin={0}
-                                                            xmax={24}
-                                                            x={values.timeHour}
-                                                            onChange={({x}) => setFieldValue("timeHour", x)}
-                                                        />
-                                                    </div>
-
-                                                    <div>
-                                                        <InputGroup>
-                                                            <Field type="number" min={0} max={60}
-                                                                   className="form-control" value={values.timeMin}
-                                                                   onChange={(e) => setFieldValue("timeMin", e.target.value)}/>
-                                                            <Button variant="light flex-1">Min</Button>
-                                                        </InputGroup>
-                                                        <Slider
-                                                            className="w-100"
-                                                            axis="x"
-                                                            xstep={1}
-                                                            xmin={0}
-                                                            xmax={60}
-                                                            x={values.timeMin}
-                                                            onChange={({x}) => setFieldValue("timeMin", x)}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </Collapse>
-                                        </div>
-
-                                        <div className="filter-keywords">
-                                            <Button variant="light d-block w-100 text-start"
-                                                    onClick={() => setOpen({
-                                                        ...open,
-                                                        keywords: !open.keywords
-                                                    })}>{open.keywords ? (
-                                                <FiChevronDown/>) : (<FiChevronUp/>)} Keywords</Button>
-
-                                            <Collapse in={open.keywords}>
-                                                <div className="options mb-3">
-                                                    <FieldArray name="keywords">
-                                                        {({push, remove}) => (
-                                                            <>
-                                                                {values.keywords.map((_, index) => (
+                                                    <Collapse in={open.keywords}>
+                                                        <div className="options mb-3">
+                                                            <FieldArray name="keywords">
+                                                                {({push, remove}) => (
                                                                     <>
-                                                                        <InputGroup>
-                                                                            <Field name={`keywords[${index}]`}
-                                                                                   className="form-control"
-                                                                                   type="text"/>
-                                                                            {values.keywords.length === 1 ? null : (
-                                                                                <Button variant={"danger"}
-                                                                                        onClick={() => {
-                                                                                            remove(index)
-                                                                                        }}><FaTrash/></Button>
-                                                                            )}
-                                                                        </InputGroup>
+                                                                        {values.keywords.map((_, index) => (
+                                                                            <>
+                                                                                <InputGroup>
+                                                                                    <Field name={`keywords[${index}]`}
+                                                                                           className="form-control"
+                                                                                           type="text"/>
+                                                                                    {values.keywords.length === 1 ? null : (
+                                                                                        <Button variant={"danger"}
+                                                                                                onClick={() => {
+                                                                                                    remove(index)
+                                                                                                }}><FaTrash/></Button>
+                                                                                    )}
+                                                                                </InputGroup>
+                                                                            </>
+                                                                        ))}
+                                                                        <Button variant={"success"}
+                                                                                onClick={() => push('')}
+                                                                                className="mt-3 rounded-custom"><FiPlus/>Add
+                                                                            Keyword</Button>
                                                                     </>
-                                                                ))}
-                                                                <Button variant={"success"} onClick={() => push('')}
-                                                                        className="mt-3 rounded-custom"><FiPlus/>Add
-                                                                    Keyword</Button>
-                                                            </>
-                                                        )}
-                                                    </FieldArray>
+                                                                )}
+                                                            </FieldArray>
+                                                        </div>
+                                                    </Collapse>
                                                 </div>
-                                            </Collapse>
-                                        </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                            </>
+                                        )}
 
                                         {/*<Button variant="black" type="submit">Apply</Button>*/}
                                     </Form>
@@ -345,18 +406,25 @@ export default function Search() {
                                 <Dropdown.Menu>
                                     <Dropdown.Item onClick={() => setSortBy("newest")}>Newest</Dropdown.Item>
                                     <Dropdown.Item onClick={() => setSortBy("oldest")}>Oldest</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setSortBy("recentlyUpdated")}>Recently
-                                        Updated</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setSortBy("mostFav")}>Most Favourites</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setSortBy("leastFav")}>Least
-                                        Favourites</Dropdown.Item>
+                                    {formValues.searchBy === "recipe" ? (
+                                        <>
+                                            <Dropdown.Item onClick={() => setSortBy("recentlyUpdated")}>Recently
+                                                Updated</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => setSortBy("mostFav")}>Most
+                                                Favourites</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => setSortBy("leastFav")}>Least
+                                                Favourites</Dropdown.Item>
+                                        </>
+                                    ) : (
+                                        <>
+                                        </>
+                                    )}
                                 </Dropdown.Menu>
                             </Dropdown>
                             <div className="row mt-1">
-                                {formValues.searchBy && formValues.searchBy === "recipe" ? (
-
-                                    searchResult ? (
-                                        searchResult && searchResult.map((result) => {
+                                {formValues && formValues.searchBy === "recipe" ? (
+                                    searchResult && searchResult.length !== 0 ? (
+                                        searchResult?.map((result) => {
                                             return (
                                                 <>
                                                     <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-5"
@@ -368,13 +436,27 @@ export default function Search() {
                                         })
                                     ) : (
                                         <>
-                                            <LoadingSpinner/>
+                                            <h5 className="text-dark">Uh oh... We can't find what you're looking for</h5>
                                         </>
                                     )
 
                                 ) : (
                                     <>
-                                        Hello user
+                                        {/*<pre>{JSON.stringify(userSearchResult && userSearchResult, null, 2)}</pre>*/}
+                                        {userSearchResult && userSearchResult ? (
+                                            <>
+                                                {userSearchResult.map((user) => {
+                                                    return(
+                                                        <div className="col-12 col-md-4">
+                                                            <UserItem user={user}/>
+                                                        </div>
+                                                        )
+                                                })}
+                                            </>
+                                            ) : (
+                                                <>
+                                                </>
+                                        ) }
                                     </>
                                 )}
                             </div>

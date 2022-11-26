@@ -1,0 +1,520 @@
+[{
+  "_id": {
+    "$oid": "6364c7dbe2235d960147644d"
+  },
+  "name": "Delicious Burger ?",
+  "image": "1667873527509.JPG",
+  "description": "This burger is very good",
+  "category": [
+    "Burgers",
+    "American"
+  ],
+  "keywords": [
+    "Burger",
+    "Beef"
+  ],
+  "duration": [
+    {
+      "preparation": {
+        "hour": 0,
+        "minute": 10
+      },
+      "cooking": {
+        "hour": 0,
+        "minute": 10
+      },
+      "rest": {
+        "hour": 0,
+        "minute": 3
+      }
+    }
+  ],
+  "ingredients": [
+    {
+      "quantity": 4,
+      "unit": "oz",
+      "ingredient": "Beef Burger"
+    },
+    {
+      "quantity": 2,
+      "unit": "",
+      "ingredient": "Burger Buns"
+    },
+    {
+      "quantity": 15,
+      "unit": "g",
+      "ingredient": "Vegetables to your liking"
+    }
+  ],
+  "instructions": [
+    "Cook the beef",
+    "Toast the bun",
+    "Put together",
+    "Voila!"
+  ],
+  "notes": "Don't trust this recipe",
+  "publisher": {
+    "$oid": "636e573d48b7ed4affd015da"
+  },
+  "likes": 3,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1667543332300"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1669039287301"
+    }
+  },
+  "__v": 0,
+  "totalDuration": 23
+},{
+  "_id": {
+    "$oid": "6364c7e1e2235d960147644e"
+  },
+  "name": "Delicious Burger 3",
+  "image": "1667543328104.webp",
+  "description": "This burger is very good",
+  "category": [
+    "Burgers"
+  ],
+  "keywords": [
+    "Burger",
+    "Beef"
+  ],
+  "duration": [
+    {
+      "preparation": {
+        "hour": 0,
+        "minute": 10
+      },
+      "cooking": {
+        "hour": 0,
+        "minute": 10
+      },
+      "rest": {
+        "hour": 0,
+        "minute": 3
+      }
+    }
+  ],
+  "ingredients": [
+    {
+      "quantity": 4,
+      "unit": "oz",
+      "ingredient": "Beef Burger"
+    },
+    {
+      "quantity": 2,
+      "unit": "",
+      "ingredient": "Burger Buns"
+    },
+    {
+      "quantity": 15,
+      "unit": "g",
+      "ingredient": "Vegetables to your liking"
+    }
+  ],
+  "instructions": [
+    "Cook the beef",
+    "Toast the bun",
+    "Put together",
+    "Voila!"
+  ],
+  "notes": "Don't trust this recipe",
+  "publisher": {
+    "$oid": "636e573d48b7ed4affd015da"
+  },
+  "likes": 2,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1667543332300"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1669386051175"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "636996aabd4fc9190b06a7ff"
+  },
+  "name": "Sugar Honey",
+  "image": "1667873682897.jpeg",
+  "description": "Yummy n Sweet",
+  "category": [
+    "Dessert"
+  ],
+  "keywords": [
+    "Yummy",
+    "Sweet"
+  ],
+  "duration": [
+    {
+      "preparation": {
+        "hour": 0,
+        "minute": 0
+      },
+      "cooking": {
+        "hour": 0,
+        "minute": 0
+      },
+      "rest": {
+        "hour": 0,
+        "minute": 0
+      }
+    }
+  ],
+  "ingredients": [
+    {
+      "quantity": 0,
+      "unit": "",
+      "ingredient": ""
+    }
+  ],
+  "instructions": [
+    "Pour Honey",
+    "Voila!"
+  ],
+  "notes": "From Puh the bear's warehouse",
+  "servings": 0,
+  "publisher": {
+    "$oid": "636e573d48b7ed4affd015da"
+  },
+  "likes": 2,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1667864234391"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1669233009647"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "636ac12fc6374710f1bd607d"
+  },
+  "name": "Beef Stew",
+  "image": "1667940654992.jpeg",
+  "description": "Delicious Beef Stew Recipe Easy to make at home",
+  "category": [
+    "Healthy"
+  ],
+  "keywords": [
+    "Beef",
+    "Stew",
+    "Mushroom"
+  ],
+  "duration": [
+    {
+      "preparation": {
+        "hour": 0,
+        "minute": 15
+      },
+      "cooking": {
+        "hour": 1,
+        "minute": 30
+      },
+      "rest": {
+        "hour": 0,
+        "minute": 5
+      }
+    }
+  ],
+  "ingredients": [
+    {
+      "quantity": 400,
+      "unit": "g",
+      "ingredient": "stewing beef, chopped into bite-sized chunks"
+    },
+    {
+      "quantity": 1,
+      "unit": "tbsp",
+      "ingredient": "plain flour"
+    },
+    {
+      "quantity": "",
+      "unit": "",
+      "ingredient": "Salt and black pepper"
+    },
+    {
+      "quantity": 2,
+      "unit": "tbsp",
+      "ingredient": "rapeseed oil"
+    },
+    {
+      "quantity": 100,
+      "unit": "g",
+      "ingredient": "smoked lardons"
+    },
+    {
+      "quantity": 1,
+      "unit": "",
+      "ingredient": "onion, chopped"
+    },
+    {
+      "quantity": 3,
+      "unit": "",
+      "ingredient": "carrots, diced"
+    },
+    {
+      "quantity": 500,
+      "unit": "ml",
+      "ingredient": "red wine"
+    },
+    {
+      "quantity": 400,
+      "unit": "g",
+      "ingredient": "tin of chopped tomatoes"
+    },
+    {
+      "quantity": 250,
+      "unit": "g",
+      "ingredient": "chestnut mushrooms, halved"
+    }
+  ],
+  "instructions": [
+    "Preheat the oven to 160 ̊C/140 ̊C fan/gas mark 3.",
+    "Place the beef in a bowl, sprinkle over the flour and season with salt and pepper.",
+    "Heat half of the oil in a large ovenproof casserole dish over a medium-high heat. Working in batches to avoid crowding the pan, cook the beef for 3-4 minutes until browned. Transfer to a plate using a slotted spoon and set aside.",
+    "Heat the remaining oil in the same pan over a medium heat and cook the bacon, onion and carrots for five minutes until golden, stirring.",
+    "Add the wine, bring to the boil and cook for one minute, then add the tomatoes and return the beef to the pot.",
+    "Bring to the boil, cover with a lid and transfer to the oven. Cook for 11⁄2 hours, then add the mushrooms. Return to the oven for 30 minutes longer until the beef and vegetables are tender.",
+    "Serve with mashed potato and a sprinkle of chopped parsley."
+  ],
+  "notes": "Serve with mashed potato and a sprinkle of chopped parsley.",
+  "servings": 4,
+  "publisher": {
+    "$oid": "636e573d48b7ed4affd015da"
+  },
+  "likes": 2,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1667940655082"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1669386048159"
+    }
+  },
+  "__v": 0,
+  "totalDuration": 110
+},{
+  "_id": {
+    "$oid": "637270e48accad62e6e27c96"
+  },
+  "name": "Beef Stew 2",
+  "image": "1667940654992.jpeg",
+  "description": "Delicious Beef Stew Recipe Easy to make at home",
+  "category": [
+    "American"
+  ],
+  "keywords": [
+    "Beef",
+    "Stew",
+    "Mushroom"
+  ],
+  "duration": [
+    {
+      "preparation": {
+        "hour": 0,
+        "minute": 15
+      },
+      "cooking": {
+        "hour": 1,
+        "minute": 30
+      },
+      "rest": {
+        "hour": 0,
+        "minute": 5
+      }
+    }
+  ],
+  "ingredients": [
+    {
+      "quantity": 400,
+      "unit": "g",
+      "ingredient": "stewing beef, chopped into bite-sized chunks"
+    },
+    {
+      "quantity": 1,
+      "unit": "tbsp",
+      "ingredient": "plain flour"
+    },
+    {
+      "quantity": "",
+      "unit": "",
+      "ingredient": "Salt and black pepper"
+    },
+    {
+      "quantity": 2,
+      "unit": "tbsp",
+      "ingredient": "rapeseed oil"
+    },
+    {
+      "quantity": 100,
+      "unit": "g",
+      "ingredient": "smoked lardons"
+    },
+    {
+      "quantity": 1,
+      "unit": "",
+      "ingredient": "onion, chopped"
+    },
+    {
+      "quantity": 3,
+      "unit": "",
+      "ingredient": "carrots, diced"
+    },
+    {
+      "quantity": 500,
+      "unit": "ml",
+      "ingredient": "red wine"
+    },
+    {
+      "quantity": 400,
+      "unit": "g",
+      "ingredient": "tin of chopped tomatoes"
+    },
+    {
+      "quantity": 250,
+      "unit": "g",
+      "ingredient": "chestnut mushrooms, halved"
+    }
+  ],
+  "instructions": [
+    "Preheat the oven to 160 ̊C/140 ̊C fan/gas mark 3.",
+    "Place the beef in a bowl, sprinkle over the flour and season with salt and pepper.",
+    "Heat half of the oil in a large ovenproof casserole dish over a medium-high heat. Working in batches to avoid crowding the pan, cook the beef for 3-4 minutes until browned. Transfer to a plate using a slotted spoon and set aside.",
+    "Heat the remaining oil in the same pan over a medium heat and cook the bacon, onion and carrots for five minutes until golden, stirring.",
+    "Add the wine, bring to the boil and cook for one minute, then add the tomatoes and return the beef to the pot.",
+    "Bring to the boil, cover with a lid and transfer to the oven. Cook for 11⁄2 hours, then add the mushrooms. Return to the oven for 30 minutes longer until the beef and vegetables are tender.",
+    "Serve with mashed potato and a sprinkle of chopped parsley."
+  ],
+  "notes": "Serve with mashed potato and a sprinkle of chopped parsley.",
+  "servings": 4,
+  "publisher": {
+    "$oid": "636e573d48b7ed4affd015da"
+  },
+  "likes": 3,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1667940655082"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1669386049139"
+    }
+  },
+  "__v": 0,
+  "totalDuration": 110
+},{
+  "_id": {
+    "$oid": "637e7c2b242ecfbd08f5bd9b"
+  },
+  "name": "Warm cauliflower salad",
+  "image": "1669233430656.webp",
+  "description": "Cauliflower is often overlooked, but try it roasted in this winter salad for a plateful of crunchy goodness",
+  "category": [
+    "Healthy"
+  ],
+  "keywords": [
+    "Cauliflower",
+    "Salad",
+    "Roasted"
+  ],
+  "duration": [
+    {
+      "preparation": {
+        "hour": 0,
+        "minute": 15
+      },
+      "cooking": {
+        "hour": 0,
+        "minute": 35
+      },
+      "rest": {
+        "hour": 0,
+        "minute": 0
+      }
+    }
+  ],
+  "totalDuration": 50,
+  "ingredients": [
+    {
+      "quantity": 1,
+      "unit": "",
+      "ingredient": "cauliflower, broken into florets"
+    },
+    {
+      "quantity": 2,
+      "unit": "tbsp",
+      "ingredient": "olive oil"
+    },
+    {
+      "quantity": 1,
+      "unit": "",
+      "ingredient": "red onion, thinly sliced"
+    },
+    {
+      "quantity": 3,
+      "unit": "tbsp",
+      "ingredient": "sherry vinegar"
+    },
+    {
+      "quantity": 1.5,
+      "unit": "tbsp",
+      "ingredient": "honey"
+    },
+    {
+      "quantity": 3,
+      "unit": "tbsp",
+      "ingredient": "raisins"
+    },
+    {
+      "quantity": 0,
+      "unit": "",
+      "ingredient": "small bunch dill, snipped"
+    },
+    {
+      "quantity": 3,
+      "unit": "tbsp",
+      "ingredient": "toasted, flaked almond"
+    },
+    {
+      "quantity": 50,
+      "unit": "g",
+      "ingredient": "baby spinach"
+    }
+  ],
+  "instructions": [
+    "Heat oven to 200C/180C fan/gas 6. Toss the cauliflower with the olive oil, season and roast for 15 mins. Stir in the red onion and carry on roasting for 15-20 mins more until tender.",
+    "While the cauliflower is roasting, mix the vinegar, honey and raisins with some seasoning.",
+    "When the cauliflower is done, stir in the dressing, dill, almonds and spinach, and serve."
+  ],
+  "notes": "",
+  "servings": 4,
+  "publisher": {
+    "$oid": "636e573d48b7ed4affd015da"
+  },
+  "likes": 2,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1669233707947"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1669386047155"
+    }
+  },
+  "__v": 0
+}]
