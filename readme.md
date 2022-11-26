@@ -1,7 +1,7 @@
-#Central Recipe
+# Central Recipe
 Central Recipe is a MERN stack application for users to share their favourites recipe around
 
-###Features
+### Features
 - Register: create, read, update or delete a profile with personal information, including a profile picture and password management (change)
 - Authentication: Log in and log out
 - Search: for recipes and users that match certain criteria (e.g. name, time to cook, category, keywords, max/min of cooking time, etc.)
@@ -12,13 +12,13 @@ Central Recipe is a MERN stack application for users to share their favourites r
 - Any user can search for recipes or users and see the results
 - Submit recipe, view, edit, delete, and share
 
-###Installation
+### Installation
 1. Remove package-lock.json
 2. Install packages with `npm i` in `/` and `/frontend`
 3. Start frontend and backend with `npm run dev`
 4. .env file is required at `/`
 
-####.ENV
+#### .ENV
 ```
 NODE_ENV = development
 PORT = 8000 // Backend Port
@@ -27,13 +27,13 @@ JWT_SECRET = ABC123
 JWT_EXPIRES = 1d
 ```
 
-####Sample Data for MongoDB
+#### Sample Data for MongoDB
 - Import from `recipes.json` and `users.json`
 
 
-###Technologies
+### Technologies
 - MERN Stack (MongoDB, Express, React, Node.js)
-####Frontend
+#### Frontend
 - @reduxjs/toolkit
 - @splidejs/react-splide
 - @testing-library/jest-dom
@@ -57,7 +57,7 @@ JWT_EXPIRES = 1d
 - web-vitals
 - yup
 
-####Backend
+#### Backend
 - bcryptjs
 - colors
 - dotenv
@@ -68,10 +68,10 @@ JWT_EXPIRES = 1d
 - mongoose
 - multer
 
-####Dev Dependencies
+#### Dev Dependencies
 - nodemon
 - concurrently
 
-####Credits
+#### Credits
 - [Icons8](https://icons8.com/) - icons and other assets
 
